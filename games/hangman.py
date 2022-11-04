@@ -2,8 +2,10 @@ import random
 from .game import Game
 
 
-
 class Hangman(Game):
+    """
+    Game to guess a word.
+    """
     easy_words = ["them", "four", "dog", "law"]
     medium_words = ["duplex", "jogging", "walkway", "buffalo", "funny"]
     hard_words = ["joyful", "bikini", "megahertz", "spritz", "lengths", "subway", "hyphen", "nightclub", "rhythm"]
@@ -14,43 +16,19 @@ class Hangman(Game):
         "3": hard_words
     }
 
-    points = 6
-    used_letters = []
+    guesses = 6
 
-    def play(self):
-        word, letters = self.start_game_settings()
-
-        # Display on user print of hangman wih letter word placed
-        while True:
-            self.display_game()
-            
-            letter = input("Choose a letter: ")
-
-            self.process_game(letter)
-
-            finish = self.check_points()
-
-            if finish:
-                print(f"You lose. The word was {word}.")
-                break
-            
-
-            # Check if letter is on the word
-            # If it's on the word, go back to step 4
-            # If it's on word but already displayed, discount one point
-            # If it's not on word, discount one point
-            # If user points are over, finish game, and ask if want to start over.
-            # Go back to step 4
-        return 1
+    def __init__(self):
+        self.word = None
+        self.letters = set()
 
     def start_game_settings(self):
         difficulty = self.get_difficulty_level()
         self.word = self.get_random_word(difficulty)
         self.letters = self.get_letters()
-        print(self.word, self.letters)
-        return self.word, self.letters
 
-    def get_difficulty_level(self):
+    @staticmethod
+    def get_difficulty_level():
         while True:
             difficulty = input("""Choose your level:
 1 - Beginner
@@ -61,7 +39,7 @@ Write your number: """)
             if difficulty in ["1", "2", "3"]:
                 break
             else:
-                print("Choose a number.")
+                print("Choose a number correctly.")
 
         return difficulty
     
@@ -75,6 +53,29 @@ Write your number: """)
         else:
             return random.choices(self.word)
 
+    def start_game(self):
+        while True:
+            self.display_game()
+
+            letter = input("Choose a letter: ")
+            self.letters.add(letter)
+
+            guessed = self.check_letter_on_word(letter)
+
+            if guessed:
+                won = self.check_user_won()
+                if won:
+                    print("You Won!!! :D")
+                    return True
+                continue
+
+            self.update_guesses()
+
+            if self.guesses <= 0:
+                print("You lost!!! :(")
+                print(f"The word was {self.word}.")
+                return False
+
     def display_game(self):
         for letter in self.word:
             if letter in self.letters:
@@ -82,12 +83,21 @@ Write your number: """)
             else:
                 print("_", end=" ")
 
-    def process_game(self, letter):
+    def check_letter_on_word(self, letter):
         if letter in self.word:
-            self.letters.append(letter)
-        else:
-            self.points -= 1
+            return True
+        return False
 
-    def check_points(self):
-        if self.points <= 0:
-            return False
+    def check_user_won(self):
+        for letter in self.word:
+
+            # TODO: Use a binary search tree
+            for used_letter in self.letters:
+                if letter == used_letter:
+                    break
+            else:
+                return False
+        return True
+
+    def update_guesses(self):
+        self.guesses -= 1
