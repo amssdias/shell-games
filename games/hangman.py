@@ -9,6 +9,7 @@ class Hangman(Game):
     easy_words = ["them", "four", "dog", "law"]
     medium_words = ["duplex", "jogging", "walkway", "buffalo", "funny"]
     hard_words = ["joyful", "bikini", "megahertz", "spritz", "lengths", "subway", "hyphen", "nightclub", "rhythm"]
+    random = ["four", "dog", "bikini", "megahertz", "jogging"]
 
     game_difficulty = {
         "1": easy_words,
@@ -16,11 +17,10 @@ class Hangman(Game):
         "3": hard_words
     }
 
-    guesses = 6
-
     def __init__(self):
         self.word = None
         self.letters = set()
+        self.guesses = 6
 
     def start_game_settings(self):
         difficulty = self.get_difficulty_level()
@@ -44,7 +44,7 @@ Write your number: """)
         return difficulty
     
     def get_random_word(self, difficulty: str):
-        return random.choice(self.game_difficulty.get(difficulty, []))
+        return random.choice(self.game_difficulty.get(difficulty, self.random))
     
     def get_letters(self):
         # TODO: Change this method to be more consive depending on the level of difficulty as well.
