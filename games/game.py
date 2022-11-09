@@ -2,7 +2,6 @@ from abc import ABC, abstractmethod
 
 
 class Game(ABC):
-
     def play(self):
         self.start_game_settings()
         won = self.start_game()

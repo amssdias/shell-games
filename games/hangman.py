@@ -6,16 +6,23 @@ class Hangman(Game):
     """
     Game to guess a word.
     """
+
     easy_words = ["them", "four", "dog", "law"]
     medium_words = ["duplex", "jogging", "walkway", "buffalo", "funny"]
-    hard_words = ["joyful", "bikini", "megahertz", "spritz", "lengths", "subway", "hyphen", "nightclub", "rhythm"]
+    hard_words = [
+        "joyful",
+        "bikini",
+        "megahertz",
+        "spritz",
+        "lengths",
+        "subway",
+        "hyphen",
+        "nightclub",
+        "rhythm",
+    ]
     random = ["four", "dog", "bikini", "megahertz", "jogging"]
 
-    game_difficulty = {
-        "1": easy_words,
-        "2": medium_words,
-        "3": hard_words
-    }
+    game_difficulty = {"1": easy_words, "2": medium_words, "3": hard_words}
 
     def __init__(self):
         self.word = None
@@ -30,11 +37,13 @@ class Hangman(Game):
     @staticmethod
     def get_difficulty_level():
         while True:
-            difficulty = input("""Choose your level:
+            difficulty = input(
+                """Choose your level:
 1 - Beginner
 2 - Medium
 3 - Hard
-Write your number: """)
+Write your number: """
+            )
 
             if difficulty in ["1", "2", "3"]:
                 break

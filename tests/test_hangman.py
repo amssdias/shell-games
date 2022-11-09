@@ -4,7 +4,6 @@ from games.hangman import Hangman
 
 
 class TestHangman(unittest.TestCase):
-
     def setUp(self) -> None:
         self.game = Hangman()
 
@@ -12,6 +11,24 @@ class TestHangman(unittest.TestCase):
         self.assertEqual(self.game.letters, set())
         self.assertEqual(self.game.guesses, 6)
         self.assertEqual(self.game.word, None)
+        self.assertEqual(self.game.easy_words, ["them", "four", "dog", "law"])
+        self.assertEqual(
+            self.game.medium_words, ["duplex", "jogging", "walkway", "buffalo", "funny"]
+        )
+        self.assertEqual(
+            self.game.hard_words,
+            [
+                "joyful",
+                "bikini",
+                "megahertz",
+                "spritz",
+                "lengths",
+                "subway",
+                "hyphen",
+                "nightclub",
+                "rhythm",
+            ],
+        )
 
     def test_hangman_get_random_word(self):
         self.assertIn(self.game.get_random_word("1"), self.game.easy_words)
@@ -27,7 +44,9 @@ class TestHangman(unittest.TestCase):
         pass
 
     def test_hangman_get_letters(self):
-        pass
+        word = "animal"
+        self.game.word = word
+        self.assertIn("".join(self.game.get_letters()), word)
 
     def test_hangman_game_settings(self):
         pass
