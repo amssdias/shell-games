@@ -1,4 +1,5 @@
 import random
+
 from .game import Game
 
 
@@ -35,7 +36,7 @@ class Hangman(Game):
         self.letters = self.get_letters()
 
     @staticmethod
-    def get_difficulty_level():
+    def get_difficulty_level() -> str:
         while True:
             difficulty = input(
                 """Choose your level:
@@ -52,13 +53,13 @@ Write your number: """
 
         return difficulty
 
-    def get_random_word(self, difficulty: str):
+    def get_random_word(self, difficulty: str) -> str:
         return random.choice(self.game_difficulty.get(difficulty, self.random))
 
-    def get_letters(self):
-        return random.choices(self.word)
+    def get_letters(self) -> set():
+        return set(random.choices(self.word))
 
-    def start_game(self):
+    def start_game(self) -> bool:
         while True:
             self.display_game()
 
@@ -97,8 +98,6 @@ Write your number: """
 
     def check_user_won(self):
         for letter in self.word:
-
-            # TODO: Use a binary search tree
             for used_letter in self.letters:
                 if letter == used_letter:
                     break

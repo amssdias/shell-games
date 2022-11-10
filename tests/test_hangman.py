@@ -40,6 +40,7 @@ class TestHangman(unittest.TestCase):
         self.assertIn(self.game.get_random_word(0), self.game.random)
         self.assertIn(self.game.get_random_word(2.5), self.game.random)
         self.assertIn(self.game.get_random_word(True), self.game.random)
+        self.assertIsInstance(self.game.get_random_word("as"), str)
 
     @patch("games.hangman.print", return_value=None)
     @patch("games.hangman.input", side_effect=["5", "2"])
@@ -82,7 +83,17 @@ class TestHangman(unittest.TestCase):
             self.game.check_letter_on_word(12)
 
     def test_check_user_won(self):
-        pass
+        self.game.word = "animal"
+        self.game.letters = {"a", "f", "d", "e"}
+
+        self.assertFalse(self.game.check_user_won())
+
+        self.game.letters = {"a", "f", "d", "e", "n", "i", "m", "a", "l"}
+        self.assertTrue(self.game.check_user_won())
 
     def test_update_guesses(self):
-        pass
+        self.game.update_guesses()
+        self.assertEqual(self.game.guesses, 5)
+        
+        self.game.update_guesses()
+        self.assertEqual(self.game.guesses, 4)
