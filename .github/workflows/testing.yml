@@ -17,4 +17,7 @@ jobs:
         python-version: 3.9
     - name: Run Hangman tests
       run: |
-        python -m unittest discover
+        coverage -m unittest discover
+    - name: Coverage Report
+      run: |
+        coverage report -m

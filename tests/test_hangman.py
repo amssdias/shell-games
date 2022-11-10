@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 from games.hangman import Hangman
 
@@ -40,8 +41,10 @@ class TestHangman(unittest.TestCase):
         self.assertIn(self.game.get_random_word(2.5), self.game.random)
         self.assertIn(self.game.get_random_word(True), self.game.random)
 
-    def test_hangman_get_difficulty_level(self):
-        pass
+    @patch("games.hangman.print", return_value=None)
+    @patch("games.hangman.input", side_effect=["5", "2"])
+    def test_hangman_get_difficulty_level(self, mocked_input, mocked_print):
+        self.assertEqual(self.game.get_difficulty_level(), "2")
 
     def test_hangman_get_letters(self):
         word = "animal"
@@ -49,4 +52,37 @@ class TestHangman(unittest.TestCase):
         self.assertIn("".join(self.game.get_letters()), word)
 
     def test_hangman_game_settings(self):
+
+        with patch("games.hangman.input") as mocked_input:
+            mocked_input.side_effect = ["1", "2", "3"]
+            
+            self.game.start_game_settings()
+            self.assertIn(self.game.word, self.game.easy_words)
+            self.assertIn("".join(self.game.letters), self.game.word)
+
+            self.game.start_game_settings()
+            self.assertIn(self.game.word, self.game.medium_words)
+            self.assertIn("".join(self.game.letters), self.game.word)
+
+            self.game.start_game_settings()
+            self.assertIn(self.game.word, self.game.hard_words)
+            self.assertIn("".join(self.game.letters), self.game.word)
+
+    def test_display_game(self):
+        pass
+
+    def test_check_letter_on_word(self):
+        self.game.word = "animal"
+
+        self.assertEqual(self.game.check_letter_on_word("a"), True)
+        self.assertEqual(self.game.check_letter_on_word("A"), False)
+        self.assertEqual(self.game.check_letter_on_word("b"), False)
+
+        with self.assertRaises(TypeError) as err:
+            self.game.check_letter_on_word(12)
+
+    def test_check_user_won(self):
+        pass
+
+    def test_update_guesses(self):
         pass

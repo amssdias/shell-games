@@ -51,16 +51,12 @@ Write your number: """
                 print("Choose a number correctly.")
 
         return difficulty
-    
+
     def get_random_word(self, difficulty: str):
         return random.choice(self.game_difficulty.get(difficulty, self.random))
-    
+
     def get_letters(self):
-        # TODO: Change this method to be more consive depending on the level of difficulty as well.
-        if len(self.word) < 6:
-            return random.choices(self.word)
-        else:
-            return random.choices(self.word)
+        return random.choices(self.word)
 
     def start_game(self):
         while True:
@@ -92,7 +88,9 @@ Write your number: """
             else:
                 print("_", end=" ")
 
-    def check_letter_on_word(self, letter):
+    def check_letter_on_word(self, letter: str):
+        if not isinstance(letter, str):
+            raise TypeError("Argument must be of type str.")
         if letter in self.word:
             return True
         return False
