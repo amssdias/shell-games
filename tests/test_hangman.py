@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from games.hangman import Hangman
+from games.hangman.hangman import Hangman
 
 
 class TestHangman(unittest.TestCase):
@@ -42,8 +42,8 @@ class TestHangman(unittest.TestCase):
         self.assertIn(self.game.get_random_word(True), self.game.random)
         self.assertIsInstance(self.game.get_random_word("as"), str)
 
-    @patch("games.hangman.print", return_value=None)
-    @patch("games.hangman.input", side_effect=["5", "2"])
+    @patch("games.hangman.hangman.print", return_value=None)
+    @patch("games.hangman.hangman.input", side_effect=["5", "2"])
     def test_hangman_get_difficulty_level(self, mocked_input, mocked_print):
         self.assertEqual(self.game.get_difficulty_level(), "2")
 
@@ -54,7 +54,7 @@ class TestHangman(unittest.TestCase):
 
     def test_hangman_game_settings(self):
 
-        with patch("games.hangman.input") as mocked_input:
+        with patch("games.hangman.hangman.input") as mocked_input:
             mocked_input.side_effect = ["1", "2", "3"]
             
             self.game.start_game_settings()
@@ -69,8 +69,23 @@ class TestHangman(unittest.TestCase):
             self.assertIn(self.game.word, self.game.hard_words)
             self.assertIn("".join(self.game.letters), self.game.word)
 
-    def test_display_game(self):
-        pass
+    @patch("games.hangman.hangman.print", return_value=None)
+    @patch("games.hangman.hangmandraw.print", return_value=None)
+    def test_display_game(self, mocked_draw_print, mocked_print):
+        self.game.word = "animal"
+        self.game.letters.add("a")
+
+        with patch("games.hangman.hangman.input") as mocked_input:
+
+            mocked_input.side_effect = ["t", "n", "i", "m", "l"]
+            self.assertTrue(self.game.start_game())
+            self.assertEqual(self.game.guesses, 5)
+
+            self.game.guesses = 6
+            self.game.letters = set("a")
+            mocked_input.side_effect = ["t", "g", "l", "u", "z", "h", "r", "e"]
+            self.assertFalse(self.game.start_game())
+            self.assertEqual(self.game.guesses, 0)
 
     def test_check_letter_on_word(self):
         self.game.word = "animal"

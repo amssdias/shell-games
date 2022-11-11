@@ -1,9 +1,10 @@
 import random
 
-from .game import Game
+from games.game import Game
+from games.hangman.hangmandraw import HangmanDraw
 
 
-class Hangman(Game):
+class Hangman(Game, HangmanDraw):
     """
     Game to guess a word.
     """
@@ -78,11 +79,14 @@ Write your number: """
             self.update_guesses()
 
             if self.guesses <= 0:
+                self.display_draw()
                 print("You lost!!! :(")
                 print(f"The word was {self.word}.")
                 return False
 
     def display_game(self):
+        self.display_draw()
+
         for letter in self.word:
             if letter in self.letters:
                 print(letter, end=" ")
