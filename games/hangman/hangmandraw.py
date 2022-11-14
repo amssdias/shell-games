@@ -1,8 +1,10 @@
 class HangmanDraw:
     def display_draw(self):
-        print("_______________")
+        for _ in range(15):
+            print("_", end="")
+        print()
 
-        for i in range(4):
+        for _ in range(4):
             self.print_base()
 
         self.display_draw_head()
@@ -23,7 +25,7 @@ class HangmanDraw:
             print("|       \           /")
             print("|        \_________/")
         else:
-            for i in range(8):
+            for _ in range(8):
                 print("|")
     
     def display_draw_body_arms(self):
@@ -36,7 +38,7 @@ class HangmanDraw:
             print("|           \ | /")
             print("|            \|/")
 
-            for i in range(4):
+            for _ in range(4):
                 self.print_base()
         
         elif self.guesses < 2:
@@ -45,16 +47,16 @@ class HangmanDraw:
             print("|          \  |")
             print("|           \ |")
             print("|            \|")
-            for i in range(4):
+            for _ in range(4):
                 self.print_base()
 
         elif self.guesses < 5:
             
             # Print only the body
-            for i in range(9):
+            for _ in range(9):
                 self.print_base()
         else:
-            for i in range(9):
+            for _ in range(9):
                 print("|")
 
     def display_draw_legs(self):
@@ -73,7 +75,7 @@ class HangmanDraw:
                 print("|" + "/".rjust(i))
         
         else:
-            for i in range(4):
+            for _ in range(4):
                 print("|")
 
     def print_base(self):
