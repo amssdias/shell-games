@@ -1,14 +1,15 @@
-from games.hangman import Hangman
+from games import Hangman, BattleShip
 
 games = {
     "hangman": Hangman,
+    "battleship": BattleShip,
 }
 
 game = Hangman()
 
 while True:
 
-    won = game.play()
+    game.play()
 
     user_answer = input("Would you like to retry? (Y/N)")
     if user_answer in ["Y", "y"]:
