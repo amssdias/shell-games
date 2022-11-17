@@ -22,6 +22,7 @@ class BattleShip(Game):
                 "size": 2,
             },
         }
+        self.user_points = 50
         self.battlefield = self.build_battlefield()
 
     def build_battlefield(self):
@@ -75,4 +76,27 @@ class BattleShip(Game):
             return {(row, ship_column) for row in range(ship_row, ship_row + ship_size)}
 
     def start_game(self):
-        pass
+        
+        while True:
+            self.print_battlefield()
+            
+
+    def print_battlefield(self):
+        self.print_battlefield_columns()
+        print()
+        self.print_battlefield_rows()
+
+    def print_battlefield_columns(self):
+        for column in range(len(self.battlefield) + 1):
+            if column == 0:
+                print(" ", end="  ")
+                continue
+            print(column, end="  ")
+
+    def print_battlefield_rows(self):
+        index_A = ord("A")
+        for index, row in enumerate(self.battlefield, index_A):
+            print(chr(index), end="  ")
+            for dot in row:
+                print(".", end="  ")
+            print()
