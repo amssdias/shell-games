@@ -1,9 +1,13 @@
 import random
+import string
 
 from games.game import Game
 
-class BattleShip(Game):
 
+class BattleShip(Game):
+    """
+    Battleship game, try to call your shot and hit a ship!
+    """
     def __init__(self):
         self.ships = {
             "carrier": {
@@ -26,15 +30,23 @@ class BattleShip(Game):
         self.battlefield = self.build_battlefield()
 
     def build_battlefield(self):
+        """Build battlefield to print out."""
         battle_field = [["." for row in range(10)] for column in range(10)]
         return battle_field
 
     def start_game_settings(self):
         self.set_ships_positions()
+        print("Instructions: You should call your move like: D-4/4-D.")
 
     def set_ships_positions(self):
+        """Randomly create positions for each ship."""
+
+        ships_positions = set()
 
         for ship, value in self.ships.items():
+
+            # Loop to make sure ship positions aren't colliding
+            while True:
             battlefield_ship_column_position = random.randint(0, 9)
             battlefield_ship_row_position = random.randint(0, 9)
             ship_direction_horizontal = random.choice([True, False])
@@ -46,31 +58,43 @@ class BattleShip(Game):
                 ship_positions = self.get_ship_positions_horizontal(
                     ship_size=value["size"], 
                     ship_column=battlefield_ship_column_position, 
-                    ship_row=battlefield_ship_row_position
+                        ship_row=battlefield_ship_row_position,
                 )
 
             else:
                 ship_positions = self.get_ship_positions_vertically(
                     ship_size=value["size"], 
                     ship_column=battlefield_ship_column_position, 
-                    ship_row=battlefield_ship_row_position
+                        ship_row=battlefield_ship_row_position,
                 )
+                
+                if ships_positions.isdisjoint(ship_positions):
+                    break
 
+            ships_positions.update(ship_positions)
             self.ships[ship]["position"].update(ship_positions)
 
     def get_ship_positions_horizontal(self, ship_size, ship_column, ship_row):
         if ship_column + ship_size > 9:
-            # Go towards back
-            return {(ship_row, column) for column in range(ship_column, ship_column - ship_size, -1)}
+            # Go towards back of row
+            return {
+                (ship_row, column)
+                for column in range(ship_column, ship_column - ship_size, -1)
+            }
 
         else:
             # Go towards front of row
-            return {(ship_row, column) for column in range(ship_column, ship_column + ship_size)}
+            return {
+                (ship_row, column)
+                for column in range(ship_column, ship_column + ship_size)
+            }
 
     def get_ship_positions_vertically(self, ship_size, ship_column, ship_row):
         if ship_row + ship_size > 9:
             # Go towards up
-            return {(row, ship_column) for row in range(ship_row, ship_row - ship_size, -1)}
+            return {
+                (row, ship_column) for row in range(ship_row, ship_row - ship_size, -1)
+            }
         else:
             # Go towards down
             return {(row, ship_column) for row in range(ship_row, ship_row + ship_size)}
