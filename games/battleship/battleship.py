@@ -47,26 +47,26 @@ class BattleShip(Game):
 
             # Loop to make sure ship positions aren't colliding
             while True:
-            battlefield_ship_column_position = random.randint(0, 9)
-            battlefield_ship_row_position = random.randint(0, 9)
-            ship_direction_horizontal = random.choice([True, False])
+                battlefield_ship_column_position = random.randint(0, 9)
+                battlefield_ship_row_position = random.randint(0, 9)
+                ship_direction_horizontal = random.choice([True, False])
 
-            # Sets are quicker for search
-            self.ships[ship]["position"] = set()
+                # Sets are quicker for search
+                self.ships[ship]["position"] = set()
 
-            if ship_direction_horizontal:
-                ship_positions = self.get_ship_positions_horizontal(
-                    ship_size=value["size"], 
-                    ship_column=battlefield_ship_column_position, 
+                if ship_direction_horizontal:
+                    ship_positions = self.get_ship_positions_horizontal(
+                        ship_size=value["size"],
+                        ship_column=battlefield_ship_column_position,
                         ship_row=battlefield_ship_row_position,
-                )
+                    )
 
-            else:
-                ship_positions = self.get_ship_positions_vertically(
-                    ship_size=value["size"], 
-                    ship_column=battlefield_ship_column_position, 
+                else:
+                    ship_positions = self.get_ship_positions_vertically(
+                        ship_size=value["size"],
+                        ship_column=battlefield_ship_column_position,
                         ship_row=battlefield_ship_row_position,
-                )
+                    )
                 
                 if ships_positions.isdisjoint(ship_positions):
                     break
@@ -100,10 +100,16 @@ class BattleShip(Game):
             return {(row, ship_column) for row in range(ship_row, ship_row + ship_size)}
 
     def start_game(self):
-        
+
         while True:
             self.print_battlefield()
-            
+            user_shot = input("Your call: ")
+
+            coordinates_validated = self.validate_user_shot(user_shot)
+            if not coordinates_validated:
+                continue
+
+
 
     def print_battlefield(self):
         self.print_battlefield_columns()
@@ -124,3 +130,25 @@ class BattleShip(Game):
             for dot in row:
                 print(".", end="  ")
             print()
+
+    def validate_user_shot(self, user_shot):
+        coordinates = user_shot.split("-")
+        if (
+            len(coordinates) != 2
+            or len(coordinates[0]) != 1
+            or len(coordinates[1]) != 1
+        ):
+            print("Write your move like this: A-5 or 5-A")
+            return False
+
+        rows = string.ascii_uppercase[: len(self.battlefield)]
+        if (coordinates[0] not in rows and coordinates[1] not in rows) or (
+            not coordinates[0].isnumeric() and not coordinates[1].isnumeric()
+        ):
+
+            print(f"You should provide one row and one column (C-5).")
+            return False
+
+        # TODO: Change row coordinate (letter) to number of row
+
+        return coordinates
