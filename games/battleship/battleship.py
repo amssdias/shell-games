@@ -1,5 +1,6 @@
 import random
 import string
+from games.battleship.constants import ASCII_A_UNICODE
 
 from games.game import Game
 
@@ -26,12 +27,13 @@ class BattleShip(Game):
                 "size": 2,
             },
         }
+        self.ships_positions = set()
         self.user_points = 50
         self.battlefield = self.build_battlefield()
 
     def build_battlefield(self):
         """Build battlefield to print out."""
-        battle_field = [["." for row in range(10)] for column in range(10)]
+        battle_field = [["." for _ in range(10)] for _ in range(10)]
         return battle_field
 
     def start_game_settings(self):
@@ -40,8 +42,6 @@ class BattleShip(Game):
 
     def set_ships_positions(self):
         """Randomly create positions for each ship."""
-
-        ships_positions = set()
 
         for ship, value in self.ships.items():
 
@@ -68,10 +68,10 @@ class BattleShip(Game):
                         ship_row=battlefield_ship_row_position,
                     )
                 
-                if ships_positions.isdisjoint(ship_positions):
+                if self.ships_positions.isdisjoint(ship_positions):
                     break
 
-            ships_positions.update(ship_positions)
+            self.ships_positions.update(ship_positions)
             self.ships[ship]["position"].update(ship_positions)
 
     def get_ship_positions_horizontal(self, ship_size, ship_column, ship_row):
@@ -108,6 +108,16 @@ class BattleShip(Game):
             coordinates_validated = self.validate_user_shot(user_shot)
             if not coordinates_validated:
                 continue
+            
+            # If user don't hit a ship, print Miss and continue
+            if {coordinates_validated}.isdisjoint(self.ships_positions):
+                print("Miss!")
+                self.update_battlefield(hit=False, coordinates=coordinates_validated)
+            
+            # If user hit a ship, check which one was and print message
+            else:
+                pass
+
 
 
 
@@ -124,24 +134,24 @@ class BattleShip(Game):
             print(column, end="  ")
 
     def print_battlefield_rows(self):
-        index_A = ord("A")
-        for index, row in enumerate(self.battlefield, index_A):
+        for index, row in enumerate(self.battlefield, ASCII_A_UNICODE):
             print(chr(index), end="  ")
             for dot in row:
-                print(".", end="  ")
+                print(dot, end="  ")
             print()
 
-    def validate_user_shot(self, user_shot):
+    def validate_user_shot(self, user_shot: str) -> tuple:
+        """Validate a user should write only: a letter followed by a '-' and a number. (D-5)"""
         coordinates = user_shot.split("-")
         if (
             len(coordinates) != 2
-            or len(coordinates[0]) != 1
-            or len(coordinates[1]) != 1
+            or len(coordinates[0]) > 2
+            or len(coordinates[1]) > 2
         ):
             print("Write your move like this: A-5 or 5-A")
             return False
 
-        rows = string.ascii_uppercase[: len(self.battlefield)]
+        rows = string.ascii_uppercase[:len(self.battlefield)]
         if (coordinates[0] not in rows and coordinates[1] not in rows) or (
             not coordinates[0].isnumeric() and not coordinates[1].isnumeric()
         ):
@@ -149,6 +159,19 @@ class BattleShip(Game):
             print(f"You should provide one row and one column (C-5).")
             return False
 
-        # TODO: Change row coordinate (letter) to number of row
+        if coordinates[0] in rows:
+            row = ord(coordinates[0]) - ASCII_A_UNICODE
+            column = int(coordinates[1]) - 1 # User will not write D-0, but D-1
+        else:
+            row = ord(coordinates[1]) - ASCII_A_UNICODE
+            column = int(coordinates[0]) - 1 # User will not write D-0, but D-1
+        
+        if column >= 10:
+            print("There are only 10 columns. Try again.")
+            return False
 
-        return coordinates
+        return (row, column)
+
+    def update_battlefield(self, hit: bool, coordinates: tuple):
+        row, column = coordinates
+        self.battlefield[row][column] = "X" if hit else "O"
