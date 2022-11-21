@@ -1,2 +1,2 @@
-from .hangman import *
-from .battleship import *
+from .hangman import Hangman
+from .battleship import BattleShip
