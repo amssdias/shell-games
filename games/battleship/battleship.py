@@ -28,7 +28,7 @@ class BattleShip(Game):
             },
         }
         self.ships_positions = set()
-        self.user_points = 50
+        self.user_points = 70
         self.battlefield = self.build_battlefield()
 
     def build_battlefield(self):
@@ -109,15 +109,23 @@ class BattleShip(Game):
             if not coordinates_validated:
                 continue
             
-            # If user don't hit a ship, print Miss and continue
+            # If user don't hit a ship
             if {coordinates_validated}.isdisjoint(self.ships_positions):
                 print("Miss!")
+                self.user_points -= 1
                 self.update_battlefield(hit=False, coordinates=coordinates_validated)
             
-            # If user hit a ship, check which one was and print message
             else:
                 self.print_boat_hit(coordinates_validated)
+                won = self.check_user_won()
+                if won:
+                    return True
+
                 self.update_battlefield(hit=True, coordinates=coordinates_validated)
+
+            if not self.user_points:
+                print("Sorry you lost. Ships sinking...")
+                return False
 
     def print_battlefield(self):
         self.print_battlefield_columns()
@@ -177,5 +185,11 @@ class BattleShip(Game):
     def print_boat_hit(self, coordinates: tuple):
         for ship_name, ship_info in self.ships.items():
             if not {coordinates}.isdisjoint(ship_info["position"]):
+                self.ships_positions.remove(coordinates)
                 print(f"Hit! {ship_name.capitalize()}.")
                 break
+
+    def check_user_won(self):
+        if not self.ships_positions:
+            return True
+        return False
