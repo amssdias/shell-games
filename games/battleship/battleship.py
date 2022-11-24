@@ -116,10 +116,8 @@ class BattleShip(Game):
             
             # If user hit a ship, check which one was and print message
             else:
-                pass
-
-
-
+                self.print_boat_hit(coordinates_validated)
+                self.update_battlefield(hit=True, coordinates=coordinates_validated)
 
     def print_battlefield(self):
         self.print_battlefield_columns()
@@ -175,3 +173,9 @@ class BattleShip(Game):
     def update_battlefield(self, hit: bool, coordinates: tuple):
         row, column = coordinates
         self.battlefield[row][column] = "X" if hit else "O"
+
+    def print_boat_hit(self, coordinates: tuple):
+        for ship_name, ship_info in self.ships.items():
+            if not {coordinates}.isdisjoint(ship_info["position"]):
+                print(f"Hit! {ship_name.capitalize()}.")
+                break
