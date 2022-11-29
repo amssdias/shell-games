@@ -6,7 +6,7 @@ on:
       - master
 
 jobs:
-  run_hangman_tests:
+  run_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -18,7 +18,7 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-    - name: Run Hangman tests
+    - name: Run all tests
       run: |
         coverage run -m unittest discover
     - name: Coverage Report
