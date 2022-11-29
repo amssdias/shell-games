@@ -88,8 +88,17 @@ class TestBattleship(unittest.TestCase):
         self.game.update_battlefield(hit=True, coordinates=(3, 2))
         self.assertEqual(self.game.battlefield[3][2], "X")
 
-    def _test_print_boat_hit(self):
-        pass
+    def test_print_boat_hit(self):
+        with patch("games.battleship.battleship.print") as mocked_input:
+            mocked_input.return_value = None
+            self.game.start_game_settings()
+            
+            ship_position = tuple(self.game.ships["carrier"]["position"])[0]
+            self.game.print_boat_hit(coordinates=ship_position)
+            
+            self.assertNotIn(ship_position, self.game.ships_positions)
 
-    def _test_check_user_won(self):
-        pass
+    def test_check_user_won(self):
+        self.assertEqual(self.game.check_user_won(), True)
+        self.game.ships_positions.add((4, 5))
+        self.assertEqual(self.game.check_user_won(), False)
