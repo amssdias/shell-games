@@ -171,10 +171,6 @@ class BattleShip(Game):
         else:
             row = ord(coordinates[1]) - ASCII_A_UNICODE
             column = int(coordinates[0]) - 1 # User will not write D-0, but D-1
-        
-        if column >= 10:
-            print("There are only 10 columns. Try again.")
-            return False
 
         return (row, column)
 

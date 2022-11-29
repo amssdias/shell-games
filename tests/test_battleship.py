@@ -80,6 +80,8 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(self.game.validate_user_shot("5--D"), False)
         self.assertEqual(self.game.validate_user_shot("-5D"), False)
         self.assertEqual(self.game.validate_user_shot("5D-"), False)
+        self.assertEqual(self.game.validate_user_shot("5-J"), (9, 4))
+        self.assertEqual(self.game.validate_user_shot("5-K"), True)
 
     def test_update_battlefield(self):
         self.game.update_battlefield(hit=False, coordinates=(2, 2))
