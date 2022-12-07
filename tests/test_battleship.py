@@ -1,3 +1,4 @@
+import string
 import unittest
 from unittest.mock import patch
 
@@ -18,7 +19,7 @@ class TestBattleship(unittest.TestCase):
         self.assertIsInstance(self.game.ships, dict)
         self.assertIsInstance(self.game.ships_positions, set)
         self.assertIsInstance(self.game.battlefield, list)
-        self.assertEqual(self.game.user_points, 70)
+        self.assertIsInstance(self.game.user_points, int)
 
         ships = self.game.ships.keys()
         self.assertIn("carrier", ships)
@@ -65,8 +66,35 @@ class TestBattleship(unittest.TestCase):
         ship_positions = self.game.get_ship_positions_vertically(ship_size=5, ship_column=5, ship_row=5)
         self.assertEqual(ship_positions, {(5, 5), (4, 5), (3, 5), (2, 5), (1, 5)})
 
+    def test_start_game(self):
+        with patch("games.battleship.battleship.print") as mocked_print:
+            mocked_print.return_value = None
+            self.game.start_game_settings()
+
+            with patch("games.battleship.battleship.input") as mocked_input:
+                s = list(self.game.ships_positions)
+                ships_positions = self._change_rows_for_alphabet(s)
+                mocked_input.side_effect = ships_positions
+                mocked_input.return_value = None
+
+                user_won = self.game.start_game()
+
+                self.assertEqual(user_won, True)
+
+    @staticmethod
+    def _change_rows_for_alphabet(ships_positions):
+        ascii_upper = string.ascii_uppercase
+
+        new_ship_positions = list()
+        for row, column in list(ships_positions):
+            row_letter = ascii_upper[row]
+            new_ship_positions.append(f"{row_letter}-{column + 1}")
+
+        return new_ship_positions
+
     @patch("games.battleship.battleship.print", return_value=None)
     def test_validate_user_shot(self, mocked_print):
+        self.game.start_game_settings()
         self.assertEqual(self.game.validate_user_shot("D-5"), (3, 4))
         self.assertEqual(self.game.validate_user_shot("5-D"), (3, 4))
         self.assertEqual(self.game.validate_user_shot("D5"), False)
@@ -84,6 +112,10 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(self.game.validate_user_shot("5-K"), False)
 
     def test_update_battlefield(self):
+        with patch("games.battleship.battleship.print") as mocked_print:
+            mocked_print.return_value = None
+            self.game.start_game_settings()
+            
         self.game.update_battlefield(hit=False, coordinates=(2, 2))
         self.assertEqual(self.game.battlefield[2][2], "O")
 
