@@ -28,8 +28,8 @@ class BattleShip(Game):
             },
         }
         self.ships_positions = set()
-        self.user_points = 70
-        self.battlefield = self.build_battlefield()
+        self.user_points = 0
+        self.battlefield = []
 
     def build_battlefield(self):
         """Build battlefield to print out."""
@@ -37,7 +37,9 @@ class BattleShip(Game):
         return battle_field
 
     def start_game_settings(self):
+        self.user_points = 70
         self.set_ships_positions()
+        self.battlefield = self.build_battlefield()
         print("Instructions: You should call your move like: D-4/4-D.")
 
     def set_ships_positions(self):
