@@ -1,5 +1,6 @@
 import string
 import unittest
+from colorama import Fore
 from unittest.mock import patch
 
 from games.battleship import BattleShip
@@ -117,10 +118,10 @@ class TestBattleship(unittest.TestCase):
             self.game.start_game_settings()
             
         self.game.update_battlefield(hit=False, coordinates=(2, 2))
-        self.assertEqual(self.game.battlefield[2][2], "O")
+        self.assertEqual(self.game.battlefield[2][2], Fore.LIGHTBLUE_EX + "O")
 
         self.game.update_battlefield(hit=True, coordinates=(3, 2))
-        self.assertEqual(self.game.battlefield[3][2], "X")
+        self.assertEqual(self.game.battlefield[3][2], Fore.RED + "X")
 
     def test_print_boat_hit(self):
         with patch("games.battleship.battleship.print") as mocked_input:
