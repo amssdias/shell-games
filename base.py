@@ -1,4 +1,8 @@
+import colorama
+from colorama import Fore
 from games import Hangman, BattleShip
+
+colorama.init(autoreset=True)
 
 games = {
     "Hangman": Hangman,
@@ -10,9 +14,10 @@ while True:
     print("Hello! Which game you would like to play?")
 
     for game in games.keys():
-        print(f"1 - {game}")
+        print(f"- {Fore.CYAN}{game}")
 
-    user_game = input("Write the name of the game: ")
+    user_game = input(f"Write the name of the game: {Fore.LIGHTCYAN_EX}")
+    print(Fore.RESET)
 
     game = games[user_game.capitalize()]
 

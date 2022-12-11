@@ -1,5 +1,6 @@
 import random
 
+from colorama import Fore
 from games.game import Game
 from games.hangman.hangmandraw import HangmanDraw
 
@@ -40,17 +41,18 @@ class Hangman(Game, HangmanDraw):
     def get_difficulty_level() -> str:
         while True:
             difficulty = input(
-                """Choose your level:
-1 - Beginner
-2 - Medium
-3 - Hard
-Write your number: """
+                f"""Choose your level:
+1 - {Fore.GREEN}Beginner{Fore.RESET}
+2 - {Fore.BLUE}Medium{Fore.RESET}
+3 - {Fore.RED}Hard{Fore.RESET}
+Write your number: {Fore.YELLOW}"""
             )
+            print(Fore.RESET)
 
             if difficulty in ["1", "2", "3"]:
                 break
             else:
-                print("Choose a number correctly.")
+                print(Fore.RED + "Choose a number correctly.")
 
         return difficulty
 
@@ -64,7 +66,8 @@ Write your number: """
         while True:
             self.display_game()
 
-            letter = input("Choose a letter: ")
+            letter = input("Choose a letter: " + Fore.GREEN)
+            print(Fore.RESET)
             self.letters.add(letter)
 
             guessed = self.check_letter_on_word(letter)
@@ -72,7 +75,7 @@ Write your number: """
             if guessed:
                 won = self.check_user_won()
                 if won:
-                    print("You Won!!! :D")
+                    print(Fore.GREEN + "You Won!!! :D")
                     return True
                 continue
 
@@ -80,8 +83,8 @@ Write your number: """
 
             if self.guesses <= 0:
                 self.display_draw()
-                print("You lost!!! :(")
-                print(f"The word was {self.word}.")
+                print(Fore.RED + "You lost!!! :(")
+                print(f"The word was {Fore.BLUE}{self.word}.")
                 return False
 
     def display_game(self):
@@ -89,9 +92,10 @@ Write your number: """
 
         for letter in self.word:
             if letter in self.letters:
-                print(letter, end=" ")
+                print(Fore.MAGENTA + letter, end=" ")
             else:
                 print("_", end=" ")
+        print()
 
     def check_letter_on_word(self, letter: str):
         if not isinstance(letter, str):
