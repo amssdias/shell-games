@@ -1,5 +1,7 @@
 import random
 import string
+
+from colorama import Fore
 from games.battleship.constants import ASCII_A_UNICODE
 
 from games.game import Game
@@ -9,6 +11,7 @@ class BattleShip(Game):
     """
     Battleship game, try to call your shot and hit a ship!
     """
+
     def __init__(self):
         self.ships = {
             "carrier": {
@@ -69,7 +72,7 @@ class BattleShip(Game):
                         ship_column=battlefield_ship_column_position,
                         ship_row=battlefield_ship_row_position,
                     )
-                
+
                 if self.ships_positions.isdisjoint(ship_positions):
                     break
 
@@ -110,13 +113,13 @@ class BattleShip(Game):
             coordinates_validated = self.validate_user_shot(user_shot)
             if not coordinates_validated:
                 continue
-            
+
             # If user don't hit a ship
             if {coordinates_validated}.isdisjoint(self.ships_positions):
-                print("Miss!")
+                print(Fore.BLUE + "Miss!")
                 self.user_points -= 1
                 self.update_battlefield(hit=False, coordinates=coordinates_validated)
-            
+
             else:
                 self.print_boat_hit(coordinates_validated)
                 won = self.check_user_won()
@@ -151,15 +154,11 @@ class BattleShip(Game):
     def validate_user_shot(self, user_shot: str) -> tuple:
         """Validate a user should write only: a letter followed by a '-' and a number. (D-5)"""
         coordinates = user_shot.split("-")
-        if (
-            len(coordinates) != 2
-            or len(coordinates[0]) > 2
-            or len(coordinates[1]) > 2
-        ):
+        if len(coordinates) != 2 or len(coordinates[0]) > 2 or len(coordinates[1]) > 2:
             print("Write your move like this: A-5 or 5-A")
             return False
 
-        rows = string.ascii_uppercase[:len(self.battlefield)]
+        rows = string.ascii_uppercase[: len(self.battlefield)]
         if (coordinates[0] not in rows and coordinates[1] not in rows) or (
             not coordinates[0].isnumeric() and not coordinates[1].isnumeric()
         ):
@@ -169,22 +168,24 @@ class BattleShip(Game):
 
         if coordinates[0] in rows:
             row = ord(coordinates[0]) - ASCII_A_UNICODE
-            column = int(coordinates[1]) - 1 # User will not write D-0, but D-1
+            column = int(coordinates[1]) - 1  # User will not write D-0, but D-1
         else:
             row = ord(coordinates[1]) - ASCII_A_UNICODE
-            column = int(coordinates[0]) - 1 # User will not write D-0, but D-1
+            column = int(coordinates[0]) - 1  # User will not write D-0, but D-1
 
         return (row, column)
 
     def update_battlefield(self, hit: bool, coordinates: tuple):
         row, column = coordinates
-        self.battlefield[row][column] = "X" if hit else "O"
+        self.battlefield[row][column] = (
+            Fore.RED + "X" if hit else Fore.LIGHTBLUE_EX + "O"
+        )
 
     def print_boat_hit(self, coordinates: tuple):
         for ship_name, ship_info in self.ships.items():
             if not {coordinates}.isdisjoint(ship_info["position"]):
                 self.ships_positions.remove(coordinates)
-                print(f"Hit! {ship_name.capitalize()}.")
+                print(f"Hit! {Fore.RED + ship_name.capitalize()}.")
                 break
 
     def check_user_won(self):
