@@ -47,9 +47,9 @@ class Hangman(Game, HangmanDraw):
 3 - {Fore.RED}Hard{Fore.RESET}
 Write your number: {Fore.YELLOW}"""
             )
-            print(Fore.RESET)
 
             if difficulty in ["1", "2", "3"]:
+                print(Fore.RESET)
                 break
             else:
                 print(Fore.RED + "Choose a number correctly.")
@@ -75,7 +75,6 @@ Write your number: {Fore.YELLOW}"""
             if guessed:
                 won = self.check_user_won()
                 if won:
-                    print(Fore.GREEN + "You Won!!! :D")
                     return True
                 continue
 
@@ -83,7 +82,6 @@ Write your number: {Fore.YELLOW}"""
 
             if self.guesses <= 0:
                 self.display_draw()
-                print(Fore.RED + "You lost!!! :(")
                 print(f"The word was {Fore.BLUE}{self.word}.")
                 return False
 

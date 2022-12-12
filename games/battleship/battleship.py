@@ -43,7 +43,7 @@ class BattleShip(Game):
         self.user_points = 70
         self.set_ships_positions()
         self.battlefield = self.build_battlefield()
-        print("Instructions: You should call your move like: D-4/4-D.")
+        print(Fore.YELLOW + "Instructions: You should call your move like: D-4/4-D.")
 
     def set_ships_positions(self):
         """Randomly create positions for each ship."""
@@ -129,7 +129,7 @@ class BattleShip(Game):
                 self.update_battlefield(hit=True, coordinates=coordinates_validated)
 
             if not self.user_points:
-                print("Sorry you lost. Ships sinking...")
+                print("Ships sinking...")
                 return False
 
     def print_battlefield(self):
