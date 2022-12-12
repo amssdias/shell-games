@@ -36,19 +36,26 @@ class Controller:
         for game in self.games.keys():
             print(f"- {Fore.CYAN}{game}")
 
-        user_game = input(f"Write the name of the game: {Fore.LIGHTCYAN_EX}")
+        user_input = input(f"Write the name of the game: {Fore.LIGHTCYAN_EX}")
 
-        if user_game.capitalize() not in self.games.keys():
+        validated = self.validate_game(user_input)
+        if validated:
+            return self.games[validated]()
+        return False
+
+    def validate_game(self, user_input: str):
+        user_input_capitalized = user_input.capitalize()
+        if user_input_capitalized not in self.games.keys():
             print(Fore.RED + "Game not found.")
             return False
-
-        return self.games[user_game.capitalize()]()
+        return user_input_capitalized
 
     def display_result(self, won: bool):
         if won:
             print(Fore.GREEN + "You Won!!! :D")
         else:
             print(Fore.RED + "You lost!!! :(")
+
 
 c = Controller()
 c.start()
