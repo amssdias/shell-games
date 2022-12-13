@@ -1,7 +1,9 @@
 [python-download]: https://www.python.org/downloads/
+[docker-link]: https://docs.docker.com/get-docker/
 
 ![Python Badge](https://img.shields.io/badge/Python-3.9-blue?logo=python)
 ![Workflow branch master](https://github.com/amssdias/shell-games/actions/workflows/testing.yml/badge.svg?branch=master)
+[![Docker](https://badgen.net/badge/icon/docker?icon=docker&label)](https://https://docker.com/)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 
@@ -27,19 +29,38 @@ cd shell-games
 ```
 
 
-## :mag_right: Usage
+### :mag_right: Usage
 
+[![Docker](https://i.imgur.com/VyjCJuz.png)](https://www.docker.com/)
+<br>
 
-On a new terminal window run:
+Install [Docker][docker-link] here.
+
+Once installed, all you have to do is open your terminal on the project folder and run:
+```
+docker build -t shell_games .
+```
+
+This will build an image so you can run and play without have to configure anything.
+To play all you need is run:
+```
+docker run -it shell_games
+```
+
+### Without docker
+
+On a terminal window:
 ```python
+pip install -r requirements.txt
 python base.py
 ```
 
+Have fun :smile:
 
 
 ## Design patterns used
 
-- Cohesion
-- Coupling
+- High Cohesion
+- Low Coupling
 - Strategy pattern
 - Template method pattern
