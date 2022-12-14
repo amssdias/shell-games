@@ -1,8 +1,18 @@
 import colorama
 from colorama import Fore
 from games import Hangman, BattleShip, Game
+from model import PlayerModel, JsonDB
 
 colorama.init(autoreset=True)
+
+# TODO:
+# - Create makefile with docker command
+
+# - Create User table (first_name, last_name, age) age to get statistics/analytics of averages of scores etc
+# - Create Player table (username, password, score)
+# - Create PlayerScore table (Player, score)
+
+# - Create admin menu for only specific users
 
 
 class Controller:
@@ -11,8 +21,11 @@ class Controller:
         "Battleship": BattleShip,
     }
 
+    def __init__(self, player):
+        self.player = player
+
     def start(self):
-        print(Fore.YELLOW + "Hello!")
+        print(Fore.YELLOW + f"Hello {self.player.name}!")
 
         while True:
             print("Which game you would like to play?")
@@ -56,6 +69,7 @@ class Controller:
         else:
             print(Fore.RED + "You lost!!! :(")
 
-
-c = Controller()
+db = JsonDB()
+player_model = PlayerModel(db)
+c = Controller(player_model)
 c.start()
