@@ -36,12 +36,12 @@ cd shell-games
 
 Install [Docker][docker-link] here.
 
-Once installed, all you have to do is open your terminal on the project folder and run:
+Once installed, open your terminal on the project folder and run:
 ```
 docker build -t shell_games .
 ```
 
-This will build an image so you can run and play without have to configure anything.
+This will build an image, so you can run and play without configure anything.
 To play all you need is run:
 ```
 docker run -it shell_games
