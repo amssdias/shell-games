@@ -46,17 +46,20 @@ class Controller:
                 break
 
     def get_game(self):
-        for game in self.games.keys():
-            print(f"- {Fore.CYAN}{game}")
+        self.display_games()
 
         user_input = input(f"Write the name of the game: {Fore.LIGHTCYAN_EX}")
 
-        validated = self.validate_game(user_input)
+        validated = self.validate_user_game_choice(user_input)
         if validated:
             return self.games[validated]()
         return False
 
-    def validate_game(self, user_input: str):
+    def display_games(self):
+        for game in self.games.keys():
+            print(f"- {Fore.CYAN}{game}")
+
+    def validate_user_game_choice(self, user_input: str):
         user_input_capitalized = user_input.capitalize()
         if user_input_capitalized not in self.games.keys():
             print(Fore.RED + "Game not found.")
@@ -68,6 +71,7 @@ class Controller:
             print(Fore.GREEN + "You Won!!! :D")
         else:
             print(Fore.RED + "You lost!!! :(")
+
 
 db = JsonDB()
 player_model = PlayerModel(db)

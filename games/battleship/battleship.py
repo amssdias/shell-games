@@ -2,12 +2,13 @@ import random
 import string
 
 from colorama import Fore
+from games.battleship import battleshipdraw
 from games.battleship.constants import ASCII_A_UNICODE
 
 from games.game import Game
 
 
-class BattleShip(Game):
+class BattleShip(battleshipdraw, Game):
     """
     Battleship game, try to call your shot and hit a ship!
     """
@@ -131,25 +132,6 @@ class BattleShip(Game):
             if not self.user_points:
                 print("Ships sinking...")
                 return False
-
-    def print_battlefield(self):
-        self.print_battlefield_columns()
-        print()
-        self.print_battlefield_rows()
-
-    def print_battlefield_columns(self):
-        for column in range(len(self.battlefield) + 1):
-            if column == 0:
-                print(" ", end="  ")
-                continue
-            print(column, end="  ")
-
-    def print_battlefield_rows(self):
-        for index, row in enumerate(self.battlefield, ASCII_A_UNICODE):
-            print(chr(index), end="  ")
-            for dot in row:
-                print(dot, end="  ")
-            print()
 
     def validate_user_shot(self, user_shot: str) -> tuple:
         """Validate a user should write only: a letter followed by a '-' and a number. (D-5)"""

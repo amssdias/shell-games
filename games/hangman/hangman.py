@@ -37,8 +37,7 @@ class Hangman(Game, HangmanDraw):
         self.word = self.get_random_word(difficulty)
         self.letters = self.get_letters()
 
-    @staticmethod
-    def get_difficulty_level() -> str:
+    def get_difficulty_level(self) -> str:
         while True:
             difficulty = input(
                 f"""Choose your level:
@@ -49,7 +48,7 @@ Write your number: {Fore.YELLOW}"""
             )
 
             if difficulty in ["1", "2", "3"]:
-                print(Fore.RESET)
+                self.reset_color()
                 break
             else:
                 print(Fore.RED + "Choose a number correctly.")
@@ -67,14 +66,11 @@ Write your number: {Fore.YELLOW}"""
             self.display_game()
 
             letter = input("Choose a letter: " + Fore.GREEN)
-            print(Fore.RESET)
+            self.reset_color()
             self.letters.add(letter)
 
-            guessed = self.check_letter_on_word(letter)
-
-            if guessed:
-                won = self.check_user_won()
-                if won:
+            if self.check_letter_on_word(letter):
+                if self.check_user_won():
                     return True
                 continue
 
@@ -82,7 +78,7 @@ Write your number: {Fore.YELLOW}"""
 
             if self.guesses <= 0:
                 self.display_draw()
-                print(f"The word was {Fore.BLUE}{self.word}.")
+                self.end_game_display_word()
                 return False
 
     def display_game(self):
@@ -113,3 +109,10 @@ Write your number: {Fore.YELLOW}"""
 
     def update_guesses(self):
         self.guesses -= 1
+
+    @staticmethod
+    def reset_color():
+        print(Fore.RESET)
+
+    def end_game_display_word(self):
+        print(f"The word was {Fore.BLUE}{self.word}.")
