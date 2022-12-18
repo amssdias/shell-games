@@ -67,20 +67,22 @@ class TestBattleship(unittest.TestCase):
         ship_positions = self.game.get_ship_positions_vertically(ship_size=5, ship_column=5, ship_row=5)
         self.assertEqual(ship_positions, {(5, 5), (4, 5), (3, 5), (2, 5), (1, 5)})
 
-    def test_start_game(self):
-        with patch("games.battleship.battleship.print") as mocked_print:
-            mocked_print.return_value = None
-            self.game.start_game_settings()
 
-            with patch("games.battleship.battleship.input") as mocked_input:
-                s = list(self.game.ships_positions)
-                ships_positions = self._change_rows_for_alphabet(s)
-                mocked_input.side_effect = ships_positions
-                mocked_input.return_value = None
+    @patch("games.battleship.battleship.print")
+    @patch("games.battleship.battleshipdraw.print")
+    def test_start_game(self, mocked_print, mocked_printdraw):
+        mocked_print.return_value = None
+        self.game.start_game_settings()
 
-                user_won = self.game.start_game()
+        with patch("games.battleship.battleship.input") as mocked_input:
+            s = list(self.game.ships_positions)
+            ships_positions = self._change_rows_for_alphabet(s)
+            mocked_input.side_effect = ships_positions
+            mocked_input.return_value = None
 
-                self.assertEqual(user_won, True)
+            user_won = self.game.start_game()
+
+            self.assertEqual(user_won, True)
 
     @staticmethod
     def _change_rows_for_alphabet(ships_positions):
