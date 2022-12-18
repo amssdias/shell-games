@@ -56,11 +56,3 @@ python base.py
 ```
 
 Have fun :smile:
-
-
-## Design patterns used
-
-- High Cohesion
-- Low Coupling
-- Strategy pattern
-- Template method pattern
