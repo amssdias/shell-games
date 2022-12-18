@@ -1,3 +1,3 @@
-from .hangman import Hangman
-from .battleship import BattleShip
-from .game import Game
+from games.hangman import Hangman
+from games.battleship import BattleShip
+from games.game import Game

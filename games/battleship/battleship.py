@@ -2,13 +2,13 @@ import random
 import string
 
 from colorama import Fore
-from games.battleship import battleshipdraw
+from games.battleship.battleshipdraw import BattleShipDraw
 from games.battleship.constants import ASCII_A_UNICODE
 
 from games.game import Game
 
 
-class BattleShip(battleshipdraw, Game):
+class BattleShip(Game, BattleShipDraw):
     """
     Battleship game, try to call your shot and hit a ship!
     """
