@@ -25,40 +25,36 @@ class CsvDB(DB):
             print("Seems like you have been here before. Enjoy :D")
             return self
 
-        self.save_user_to_file(name, age, email, file_name, csv_file_reader, csv_reader)
-        return csv_file_reader
+        self.save_user_to_file(name, age, email, file_name)
+
+        self.close_file(csv_file_reader)
+        return {"name": name, "age": age, "email": email}
 
     @staticmethod
     def read_file(file_name):
-        with open(file_name, "r") as csv_file:
+        csv_file = open(file_name, "r")
             return csv_file, csv.DictReader(csv_file, delimiter=",")
 
     @staticmethod
     def user_exists(email, csv_reader):
-        next(csv_reader) # Skip headers
         for line in csv_reader:
             if line["email"] == email:
                 return True
         return False
 
-    def save_user_to_file(self, name, age, email, file_name, csv_file_reader, csv_reader):
-        with open(file_name, "w", newline="") as update_csv:
-            fieldnames = ["name", "age", "email"]
-            csv_writer = csv.DictWriter(update_csv, fieldnames=fieldnames, delimiter=",")
-
-            csv_writer.writeheader()
-            csv_file_reader.seek(0)
-            next(csv_reader) # Skip headers
-
-            for line in csv_reader:
-                csv_writer.writerow(line)
+    def save_user_to_file(self, name, age, email, file_name):
+        with open(file_name, "a", newline="") as update_csv:
+            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email"], delimiter=",")
 
             new_user = {
                 "name": name,
                 "age": age,
                 "email": email,
             }
-            csv_writer.writerow(new_user)
+            writer.writerow(new_user + "\n")
 
         return update_csv
 
+    @staticmethod
+    def close_file(filename):
+        filename.close()
