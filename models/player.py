@@ -2,7 +2,7 @@ from models.abstract import DB
 
 
 class Player():
-    def __init__(self, db):
+    def __init__(self, db: DB):
         self.db = db
         self.name = self.validate_name(input("Hey, what's your name? "))
         self.age = self.validate_age(input("How old are you? "))
@@ -19,7 +19,9 @@ class Player():
         if not isinstance(age, str):
             raise Exception("Input must be a str.")
 
-        # TODO: Check if its a number
+        while not age.isnumeric() or len(age) > 2:
+            age = input("Age must be a number. Type again: ")
+        
         return age.strip()
 
     def validate_email(self, email):
