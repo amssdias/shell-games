@@ -1,4 +1,4 @@
-from models.model import CSVDB
+from models import CSVDB
 
 
 DB = CSVDB()
