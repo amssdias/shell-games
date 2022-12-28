@@ -1,3 +1,4 @@
 from .player import Player
-from .model import CsvDB, JsonDB
+from .csv_model import CSVDB
+from .json_model import JsonDB
 from .abstract import DB

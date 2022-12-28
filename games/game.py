@@ -10,8 +10,7 @@ class Game(ABC):
     @abstractmethod
     def start_game_settings(self):
         """Build all settings a game must do before playing."""
-        pass
 
     @abstractmethod
     def start_game(self):
-        pass
+        """Start the game."""
