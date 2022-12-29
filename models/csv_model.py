@@ -4,20 +4,19 @@ from models.abstract import DB
 
 
 class CSVDB(DB):
-    def save_user(self, name, age, email, file_name="data.csv"):
-        csv_file_reader, csv_reader = self.read_file(file_name)
+    def save_user(self, name, age, email, file_path="data.csv"):
+        csv_file_reader, csv_reader = self.read_file(file_path)
         if self.user_exists(email, csv_reader):
             print("Seems like you have been here before. Enjoy :D")
             return self
-
-        self.save_user_to_file(name, age, email, file_name)
-
         self.close_file(csv_file_reader)
+
+        self.save_user_to_file(name, age, email, file_path)
         return {"name": name, "age": age, "email": email}
 
     @staticmethod
-    def read_file(file_name):
-        csv_file = open(file_name, "r")
+    def read_file(file_path):
+        csv_file = open(file_path, "r")
         return csv_file, csv.DictReader(csv_file, delimiter=",")
 
     @staticmethod
@@ -27,8 +26,8 @@ class CSVDB(DB):
                 return True
         return False
 
-    def save_user_to_file(self, name, age, email, file_name):
-        with open(file_name, "a", newline="") as update_csv:
+    def save_user_to_file(self, name, age, email, file_path):
+        with open(file_path, "a", newline="") as update_csv:
             writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email"], delimiter=",")
 
             new_user = {
@@ -36,7 +35,7 @@ class CSVDB(DB):
                 "age": age,
                 "email": email,
             }
-            writer.writerow(new_user + "\n")
+            writer.writerow(new_user)
 
         return update_csv
 
