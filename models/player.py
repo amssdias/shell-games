@@ -1,3 +1,5 @@
+import re
+
 from models.abstract import DB
 
 
@@ -18,8 +20,9 @@ class Player():
     def validate_age(self, age):
         if not isinstance(age, str):
             raise TypeError(f"Input {age} must be a str.")
-
+        
         # TODO: Validate age is not "00", "01".. till 10 (not included), add tests
+        age = age.strip()
         while not age.isnumeric() or len(age) > 2:
             age = input("Age must be a number. Type again: ")
         
@@ -27,8 +30,11 @@ class Player():
 
     def validate_email(self, email):
         if not isinstance(email, str):
-            raise TypeError("Input must be a str.")
+            raise TypeError(f"Input {email} must be a str.")
 
-        # TODO: Use Regex to make sure its an email
-        return email.strip()
+        email = email.strip()
+        email_regex = re.compile(r"@[a-zA-Z-\d]+\.(com|net|es|org)$")
+        while not email_regex.search(email):
+            email = input("Email not valid.\nEmail: ")
 
+        return email

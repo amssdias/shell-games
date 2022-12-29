@@ -33,6 +33,16 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player.db, self.db)
 
     def test_validate_name(self):
+        name = "testing-name"
+        self.assertEqual(self.player.validate_name("testing-name"), name)
+
+    def test_validate_name_strip(self):
+        name = "testing-name"
+        self.assertEqual(self.player.validate_name("testing-name  "), name)
+        self.assertEqual(self.player.validate_name("  testing-name  "), name)
+        self.assertEqual(self.player.validate_name("  testing-name"), name)
+
+    def test_validate_name_exception(self):
         names = [1234, ["testing"], {"testing"}, {"name": "testing"}]
 
         for name in names:
@@ -40,19 +50,40 @@ class TestPlayer(unittest.TestCase):
                 self.player.validate_name(name)
             self.assertEqual(str(msg.exception), f"Input {name} must be a str.")
         
-
     def test_validate_age(self):
-        ages = [1234, ["testing"], {"testing"}, {"name": "testing"}]
+        with patch("models.player.input") as mocked_input:
+            mocked_input.side_effect = ["123", "a2s", "2e", "000", "10"]
+            age = self.player.validate_age("1234")
+            self.assertEqual(age, "10")
 
+    def test_validate_age_strip(self):
+        age = "20"
+        self.assertEqual(self.player.validate_age("  20"), age)
+        self.assertEqual(self.player.validate_age("20  "), age)
+        self.assertEqual(self.player.validate_age("  20  "), age)
+
+    def test_validate_age_exception(self):
+        ages = [1234, ["testing"], {"testing"}, {"name": "testing"}]
         for age in ages:
             with self.assertRaises(TypeError) as msg:
                 self.player.validate_age(age)
             self.assertEqual(str(msg.exception), f"Input {age} must be a str.")
 
+    def test_validate_email(self):
         with patch("models.player.input") as mocked_input:
-            mocked_input.side_effect = ["123", "a2s", "2e", "10"]
-            age = self.player.validate_age("1234")
-            self.assertEqual(age, "10")
+            mocked_input.side_effect = ["ad.hotmail.com", "other.-@.com", "testing@fake-email.com"]
+            email = self.player.validate_email("1234")
+            self.assertEqual(email, "testing@fake-email.com")
 
-    def _test_validate_email(self):
-        pass
+    def test_validate_email_strip(self):
+        self.assertEqual(self.player.validate_email("testing@fake-email.com  "), "testing@fake-email.com")
+        self.assertEqual(self.player.validate_email("  testing@fake-email.com"), "testing@fake-email.com")
+        self.assertEqual(self.player.validate_email("  testing@fake-email.com  "), "testing@fake-email.com")
+
+    def test_validate_email_exception(self):
+        emails = [1234, ["testing@fake-email.com"], {"testing@fake-email.com"}, {"email": "testing@fake-email.com"}]
+
+        for email in emails:
+            with self.assertRaises(TypeError) as msg:
+                self.player.validate_email(email)
+            self.assertEqual(str(msg.exception), f"Input {email} must be a str.")
