@@ -8,6 +8,7 @@ class CSVDB(DB):
         csv_file_reader, csv_reader = self.read_file(file_path)
         if self.user_exists(email, csv_reader):
             print("Seems like you have been here before. Enjoy :D")
+            self.close_file(csv_file_reader)
             return self
         self.close_file(csv_file_reader)
 
@@ -37,7 +38,7 @@ class CSVDB(DB):
             }
             writer.writerow(new_user)
 
-        return update_csv
+        return True
 
     @staticmethod
     def close_file(filename):
