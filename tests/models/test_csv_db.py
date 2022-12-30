@@ -22,7 +22,7 @@ class TestCSVDB(unittest.TestCase):
             "email": "new-user@fake-email.com"
         }
         new_user = self.db.save_user(**user, file_path=self.file_directory)
-        self.assertEqual(new_user, user)
+        self.assertTrue(new_user)
 
     def test_save_user_existing_user(self):
         self.__write_data_to_csv()
@@ -34,7 +34,7 @@ class TestCSVDB(unittest.TestCase):
 
         with patch("models.csv_model.print") as mocked_print:
             new_user = self.db.save_user(**existing_user, file_path=self.file_directory)
-            self.assertEqual(new_user, self.db)
+            self.assertFalse(new_user)
         
         self.__delete_data_from_csv()
 
@@ -46,16 +46,9 @@ class TestCSVDB(unittest.TestCase):
     def test_user_exists(self):
         self.__write_data_to_csv()
 
-        with open(self.file_directory, "r") as new_file:
-            file_reader = csv.DictReader(new_file, delimiter=",")
-
-            self.assertTrue(self.db.user_exists("testing@bogusemail.com", file_reader))
-            new_file.seek(0)
-
-            self.assertTrue(self.db.user_exists("maryjacobs@bogusemail.com", file_reader))
-            new_file.seek(0)
-
-            self.assertFalse(self.db.user_exists("nouser@bogusemail.com", file_reader))
+        self.assertTrue(self.db.user_exists("testing@bogusemail.com", self.file_directory))
+        self.assertTrue(self.db.user_exists("maryjacobs@bogusemail.com", self.file_directory))
+        self.assertFalse(self.db.user_exists("nouser@bogusemail.com", self.file_directory))
 
         self.__delete_data_from_csv()
 
