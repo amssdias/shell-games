@@ -10,7 +10,7 @@ from models.csv_model import CSVDB
 class TestCSVDB(unittest.TestCase):
     def setUp(self) -> None:
         self.db = CSVDB()
-        self.file_directory = os.getcwd() + "\\tests\models\csv\\testing.csv"
+        self.file_directory = os.getcwd() + "/tests/models/csv/testing.csv"
 
     def test_inheritance(self):
         self.assertIsInstance(self.db, DB)
