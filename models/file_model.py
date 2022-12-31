@@ -8,7 +8,7 @@ class FileDB(DB):
         self.db = file_type
         self.file_path = file_path
 
-    def save_user(self, name, age, email):
+    def save_user(self, name: str, age: str, email: str):
         if self.user_exists(email, self.file_path):
             print("Seems like you have been here before. Enjoy :D")
             return False

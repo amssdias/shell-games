@@ -1,35 +1,25 @@
 import csv
 import os
-import unittest
 
-from models.abstract import DB
 from models.files_models import CSVFile
+from tests.models.utils.test_file_utils import TestFile
 
 
-class TestCSVFile(unittest.TestCase):
+class TestCSVFile(TestFile):
     def setUp(self) -> None:
-        self.db = CSVFile()
+        super().setUp()
         self.file_directory = os.getcwd() + "/tests/models/csv/testing.csv"
-        self.user_1 = {
-            "name": "testing",
-            "age": "20",
-            "email": "testing@bogusemail.com"
-        }
-        self.user_2 = {
-            "name": "Mary",
-            "age": "23",
-            "email": "maryjacobs@bogusemail.com"
-        }
+        self.db = CSVFile()
 
     def test_get_content(self):
-        self.__write_data_to_csv()
+        self.write_data_to_csv()
 
         opened_file = open(self.file_directory, "r")
         data = self.db.get_content(opened_file)
         opened_file.close()
-        self.__delete_data_from_csv()
+        self.delete_data_from_csv()
 
-        self.assertEqual(data, [self.user_1, self.user_2])
+        self.assertCountEqual(data, [self.user_1, self.user_2])
 
     def test_write_to_file(self):
         user = {
@@ -50,14 +40,4 @@ class TestCSVFile(unittest.TestCase):
             else:
                 assert False, "It did not saved a user to the file"
         
-        self.__delete_data_from_csv()
-        
-    def __write_data_to_csv(self):
-        with open(self.file_directory, "a", newline="") as write_file:
-            writer = csv.DictWriter(write_file, fieldnames=["name", "age", "email"], delimiter=",")
-            writer.writerows([self.user_1, self.user_2])
-    
-    def __delete_data_from_csv(self):
-        with open(self.file_directory, "w", newline="") as write_file:
-            writer = csv.DictWriter(write_file, fieldnames=["name", "age", "email"], delimiter=",")
-            writer.writeheader()
+        self.delete_data_from_csv()
