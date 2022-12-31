@@ -3,16 +3,16 @@ from unittest.mock import patch
 
 import models
 from models.abstract import DB
-from models.csv_model import CSVDB
+from models.file_model import FileDB
 from models.player import Player
 
 
 class TestPlayer(unittest.TestCase):
 
-    @patch.object(models.csv_model.CSVDB, "save_user")
+    @patch.object(models.file_model.FileDB, "save_user")
     @patch("models.player.input", side_effect=["testing", "20", "testing@fakeemail.com"])
     def setUp(self, mocked_input, mocked_save_user) -> None:
-        self.db = CSVDB()
+        self.db = FileDB()
         self.player = Player(self.db)
 
     def test_initialize(self):

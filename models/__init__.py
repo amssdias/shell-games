@@ -1,4 +1,4 @@
+from .files_models import *
 from .player import Player
-from .csv_model import CSVDB
-from .json_model import JsonDB
+from .file_model import FileDB
 from .abstract import DB

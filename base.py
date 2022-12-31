@@ -4,6 +4,6 @@ from main.controller import Controller
 from models.player import Player
 
 
-player_model = Player(settings.DB)
+player_model = Player(settings.DATABASE)
 c = Controller(player_model)
 c.start()
