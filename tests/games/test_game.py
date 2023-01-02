@@ -1,11 +1,10 @@
-import string
 import unittest
 from unittest.mock import patch
 
 from games.game import Game
 
 
-class TestBattleship(unittest.TestCase):
+class TestGameABC(unittest.TestCase):
     """
     If you set __abstractmethods__ attribute to be an empty set you'll be able to instantiate abstract class.
     """
