@@ -1,10 +1,11 @@
 from models.abstract import DB
 from models.files_models import JsonFile
+from models.files_models.csv_model import CSVFile
 
 
 class FileDB(DB):
 
-    def __init__(self, file_type=JsonFile(), file_path="data.json"):
+    def __init__(self, file_type, file_path: str):
         self.db = file_type
         self.file_path = file_path
 
@@ -35,3 +36,12 @@ class FileDB(DB):
         opened_file.close()
         return file_content
 
+
+class JsonDB(FileDB):
+    def __init__(self):
+        super().__init__(file_path=JsonFile(), file_type="data.json")
+
+
+class CSVDB(FileDB):
+    def __init__(self):
+        super().__init__(file_path=CSVFile(), file_type="data.csv")

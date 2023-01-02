@@ -1,4 +1,3 @@
-from models import FileDB, JsonFile
-
+from models import JsonDB
 # We can choose between JsonFile or CsvFile
-DATABASE = FileDB(file_type=JsonFile(), file_path="data.json")
+DATABASE = JsonDB()
