@@ -38,10 +38,10 @@ class FileDB(DB):
 
 
 class JsonDB(FileDB):
-    def __init__(self):
-        super().__init__(file_path=JsonFile(), file_type="data.json")
+    def __init__(self, file_path):
+        super().__init__(file_type=JsonFile(), file_path=file_path or "data.json")
 
 
 class CSVDB(FileDB):
-    def __init__(self):
-        super().__init__(file_path=CSVFile(), file_type="data.csv")
+    def __init__(self, file_path):
+        super().__init__(file_type=CSVFile(), file_path=file_path or "data.csv")
