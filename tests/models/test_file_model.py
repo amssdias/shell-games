@@ -1,3 +1,4 @@
+import csv
 import os
 from unittest.mock import patch
 from models.abstract import DB
@@ -22,6 +23,27 @@ class TestFileModel(TestFile):
         self.assertIn("db", db_initial_variables)
         self.assertIn("file_path", db_initial_variables)
 
+    def test_save_user(self):
+        user = {
+            "name": "new user",
+            "age": "22",
+            "email": "new-user@fake-email.com"
+        }
+        new_user = self.db.save_user(**user)
+        self.assertTrue(new_user)
+
+        # Check user was added to file
+        with open(self.file_directory, "r") as testing_file:
+            read_file = csv.DictReader(testing_file, delimiter=",")
+            for line in read_file:
+                if line["email"] == user["email"]:
+                    self.assertEqual(line["email"], user["email"])
+                    break
+            else:
+                assert False, "User was not saved to the file"
+
+        self.delete_data_from_csv()
+
     def test_save_existing_user(self):
         self.write_data_to_csv()
         with patch("models.file_model.print") as mocked_print:
@@ -43,4 +65,3 @@ class TestFileModel(TestFile):
         data = self.db.get_file_content(self.file_directory)
         self.assertCountEqual(data, [self.user_1, self.user_2])
         self.delete_data_from_csv()
-
