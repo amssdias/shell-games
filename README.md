@@ -21,7 +21,7 @@ These instructions will get you a copy of the project up and running on your loc
 - [Python][python-download] - 3.9
 - [Docker](https://www.docker.com/) (Optional)
 
-### Installing with Docker
+### Installing
 
 
 1. Clone this repository to your local machine
@@ -33,35 +33,30 @@ git clone https://github.com/amssdias/shell-games.git
 cd shell-games
 ```
 
-3. Build the Docker image:
+#### With Docker
+
+1. Build the Docker image:
 
 ```
 docker build -t shell_games .
 ```
 
-4. Run the Docker container:
+2. Run the Docker container:
 
 ```
 docker run -it shell_games
 ```
 
-### Installing without Docker
+#### Without Docker
 
-1. Clone this repository to your local machine.
-2. Navigate to the project directory.
 
-```
-git clone https://github.com/amssdias/shell-games.git
-cd shell-games
-```
-
-3. Install requirements with pip:
+1. Install requirements with pip:
 
 ```python
 pip install -r requirements.txt
 ```
 
-- Run program:
+2. Run program:
 
 ```python
 python base.py
