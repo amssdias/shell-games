@@ -9,50 +9,67 @@
 
 <h1 align=center>Shell Games</h1>
 
-Shell Games is a repository where there are many games produced in the shell. Some of this games I have already made when I started to code, but I decided to create a project with all of them using some design patterns.
+My project is a program that brings the classic games of Hangman and Battleship to the computer terminal. Users can choose to play either game and enjoy the challenge of guessing the hidden word or sinking their opponent's ships. The program is easy to use and provides an entertaining way to pass the time and exercise your brain. With intuitive controls and engaging gameplay, our program is sure to be a hit with users of all ages.
 
 
 ## :hammer: Getting started
 
+These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+
 ### Pre requisites
 
 - [Python][python-download] - 3.9
+- [Docker](https://www.docker.com/) (Optional)
+
+### Installing with Docker
 
 
-### Installation
+1. Clone this repository to your local machine
+2. Navigate to the project directory
 
-#### Clone the project
 
 ```
 git clone https://github.com/amssdias/shell-games.git
 cd shell-games
 ```
 
+3. Build the Docker image:
 
-### :mag_right: Usage
-
-[![Docker](https://i.imgur.com/VyjCJuz.png)](https://www.docker.com/)
-<br>
-
-Install [Docker][docker-link] here.
-
-Once installed, open your terminal on the project folder and run:
 ```
 docker build -t shell_games .
 ```
 
-This will build an image, so you can run and play without configure anything.
-To play all you need is run:
+4. Run the Docker container:
+
 ```
 docker run -it shell_games
 ```
 
-### Without docker
+### Installing without Docker
 
-On a terminal window:
+1. Clone this repository to your local machine.
+2. Navigate to the project directory.
+
+```
+git clone https://github.com/amssdias/shell-games.git
+cd shell-games
+```
+
+3. Install requirements with pip:
+
 ```python
 pip install -r requirements.txt
+```
+
+- Run program:
+
+```python
 python base.py
 ```
+
+
+## :mag_right: Usage
+
+Just follow the instructions on the terminal.
 
 Have fun :smile:
