@@ -10,11 +10,11 @@ class FileDB(DB):
         self.file_path = file_path
 
     def save_user(self, name: str, age: str, email: str):
-        if self.user_exists(email, self.file_path):
+        if self.user_exists(email):
             print("Seems like you have been here before. Enjoy :D")
             return False
 
-        data = self.get_file_content(self.file_path)
+        data = self.get_file_content()
         user = {
             "name": name,
             "age": age,
@@ -23,15 +23,15 @@ class FileDB(DB):
         self.db.write_to_file(user, data, self.file_path)
         return True
     
-    def user_exists(self, email, file_path):
-        data = self.get_file_content(file_path)
+    def user_exists(self, email):
+        data = self.get_file_content()
         for line in data:
             if line["email"] == email:
                 return True
         return False
 
-    def get_file_content(self, file_path):
-        opened_file = open(file_path, "r")
+    def get_file_content(self):
+        opened_file = open(self.file_path, "r")
         file_content = self.db.get_content(opened_file)
         opened_file.close()
         return file_content

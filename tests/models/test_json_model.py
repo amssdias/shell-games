@@ -1,14 +1,15 @@
 import json
 import os
+from pathlib import Path
 
 from models.files_models import JsonFile
 from tests.models.utils.test_file_utils import TestFile
 
 
-class TestCSVFile(TestFile):
+class TestJsonFile(TestFile):
     def setUp(self) -> None:
         super().setUp()
-        self.file_directory = os.getcwd() + "/tests/models/json/testing.json"
+        self.file_directory = Path(os.getcwd(), "tests", "models", "json", "testing.json")
         self.db = JsonFile()
 
     def test_get_content(self):
