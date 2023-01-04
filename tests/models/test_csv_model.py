@@ -1,5 +1,4 @@
 import csv
-import os
 from pathlib import Path
 
 from models.files_models import CSVFile
@@ -9,7 +8,7 @@ from tests.models.utils.test_file_utils import TestFile
 class TestCSVFile(TestFile):
     def setUp(self) -> None:
         super().setUp()
-        self.file_directory = Path(os.getcwd(), "tests", "models", "csv", "testing.csv")
+        self.file_directory = Path(Path.cwd(), "tests", "models", "csv", "testing.csv")
         self.db = CSVFile()
 
     def test_get_content(self):

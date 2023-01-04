@@ -1,9 +1,8 @@
 import csv
-import os
 from pathlib import Path
 from unittest.mock import patch
-from models.abstract import DB
 
+from models.abstract import DB
 from models.file_model import FileDB
 from models.files_models import CSVFile
 from tests.models.utils.test_file_utils import TestFile
@@ -12,7 +11,7 @@ from tests.models.utils.test_file_utils import TestFile
 class TestFileModel(TestFile):
     def setUp(self) -> None:
         super().setUp()
-        self.file_directory = Path(os.getcwd(), "tests", "models", "csv", "testing.csv")
+        self.file_directory = Path(Path.cwd(), "tests", "models", "csv", "testing.csv")
         self.db = FileDB(file_type=CSVFile(), file_path=self.file_directory)
 
     def test_inheritance(self):
