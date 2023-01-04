@@ -12,11 +12,11 @@ class FileDB(DB):
 
     def save_user(self, name: str, age: str, email: str):
         if self.file_path.exists():
-        if self.user_exists(email):
-            print("Seems like you have been here before. Enjoy :D")
-            return False
+            if self.user_exists(email):
+                print("Seems like you have been here before. Enjoy :D")
+                return False
 
-        data = self.get_file_content()
+            data = self.get_file_content()
         else:
             data = []
 
