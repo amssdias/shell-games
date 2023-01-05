@@ -9,25 +9,22 @@ class TestCSVFile(TestFile):
     def setUp(self) -> None:
         super().setUp()
         self.file_directory = Path(Path.cwd(), "tests", "models", "csv", "testing.csv")
-        self.db = CSVFile()
+        self.db = CSVFile(file_path=self.file_directory)
 
     def test_get_content(self):
         self.write_data_to_csv()
-
-        opened_file = open(self.file_directory, "r")
-        data = self.db.get_content(opened_file)
-        opened_file.close()
+        users = self.db.get_all_users()
         self.delete_data_from_csv()
 
-        self.assertCountEqual(data, [self.user_1, self.user_2])
+        self.assertCountEqual(users, [self.user_1, self.user_2])
 
-    def test_write_to_file(self):
+    def test_save_user(self):
         user = {
             "name": "new user",
             "age": "22",
             "email": "new-user@fake-email.com"
         }
-        saved_user = self.db.write_to_file(user, data=[], file_path=self.file_directory)
+        saved_user = self.db.save_user(user)
         self.assertTrue(saved_user)
 
         # Check a user was added to the testing file
@@ -41,3 +38,9 @@ class TestCSVFile(TestFile):
                 assert False, "It did not saved a user to the file"
         
         self.delete_data_from_csv()
+
+    def _test_get_user(self):
+        pass
+
+    def _test_update_user_games_played(self):
+        pass

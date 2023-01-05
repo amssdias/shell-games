@@ -2,11 +2,41 @@ import csv
 
 
 class CSVFile:
-    def get_content(self, open_file):
-        return list(csv.DictReader(open_file, delimiter=","))
 
-    def write_to_file(self, user: dict, data: list, file_path: str):
-        with open(file_path, "a", newline="") as update_csv:
-            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email"], delimiter=",")
+    def __init__(self, file_path):
+        self.file_path = file_path
+
+    def get_all_users(self):
+        opened_file = open(self.file_path, "r")
+        users = list(csv.DictReader(opened_file, delimiter=","))
+        opened_file.close()
+        return users
+    
+    def get_user(self, email):
+        with open(self.file_path, "r") as csv_file:
+            users = list(csv.DictReader(csv_file, delimiter=","))
+
+        for user in users:
+            if user["email"] == email:
+                return user
+
+    def save_user(self, user: dict):
+        with open(self.file_path, "a", newline="") as update_csv:
+            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email", "score", "games_played"], delimiter=",")
             writer.writerow(user)
+        return True
+    
+    def update_user_games_played(self, player):
+        users = self.get_all_users()
+
+        with open(self.file_path, "w", newline="") as update_csv:
+            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email", "score", "games_played"], delimiter=",")
+            writer.writeheader()
+            for user in users:
+                if user["email"] == player["email"]:
+                    try:
+                        user["games_played"] = int(user["games_played"]) + 1
+                    except TypeError as e:
+                        raise TypeError(e)
+                writer.writerow(user)
         return True

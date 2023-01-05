@@ -24,6 +24,7 @@ class Controller:
                 continue
             
             print(Fore.RESET)
+            self.player.update_games_played()
             user_result = game.play()
 
             self.display_result(user_result)

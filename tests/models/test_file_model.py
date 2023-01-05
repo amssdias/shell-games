@@ -12,24 +12,22 @@ class TestFileModel(TestFile):
     def setUp(self) -> None:
         super().setUp()
         self.file_directory = Path(Path.cwd(), "tests", "models", "csv", "testing.csv")
-        self.db = FileDB(file_type=CSVFile(), file_path=self.file_directory)
+        self.db = FileDB(file_type=CSVFile(file_path=self.file_directory))
 
     def test_inheritance(self):
         self.assertIsInstance(self.db, DB)
         self.assertIsInstance(self.db.db, CSVFile)
-        self.assertIsInstance(self.db.file_path, Path)
 
         db_initial_variables = self.db.__dict__.keys()
         self.assertIn("db", db_initial_variables)
-        self.assertIn("file_path", db_initial_variables)
 
-    def test_save_user(self):
+    def test_create_user(self):
         user = {
             "name": "new user",
             "age": "22",
             "email": "new-user@fake-email.com"
         }
-        new_user = self.db.save_user(**user)
+        new_user = self.db.create_user(**user)
         self.assertTrue(new_user)
 
         # Check user was added to file
@@ -44,11 +42,11 @@ class TestFileModel(TestFile):
 
         self.delete_data_from_csv()
 
-    def test_save_existing_user(self):
+    def test_create_existing_user(self):
         self.write_data_to_csv()
         with patch("models.file_model.print") as mocked_print:
-            new_user = self.db.save_user(**self.user_1)
-        self.assertFalse(new_user)
+            new_user = self.db.create_user(**self.user_1)
+        self.assertEqual(new_user, self.user_1)
         self.delete_data_from_csv()
 
     def test_user_exists(self):
@@ -60,8 +58,3 @@ class TestFileModel(TestFile):
 
         self.delete_data_from_csv()
 
-    def test_get_content(self):
-        self.write_data_to_csv()
-        data = self.db.get_file_content()
-        self.assertCountEqual(data, [self.user_1, self.user_2])
-        self.delete_data_from_csv()

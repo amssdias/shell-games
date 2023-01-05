@@ -10,7 +10,7 @@ from models.player import Player
 
 class TestPlayer(unittest.TestCase):
 
-    @patch.object(models.file_model.FileDB, "save_user")
+    @patch.object(models.file_model.FileDB, "create_user")
     @patch("models.player.input", side_effect=["testing", "20", "testing@fakeemail.com"])
     def setUp(self, mocked_input, mocked_save_user) -> None:
         file_path = Path(Path.cwd(), "tests", "models", "csv", "testing.csv")

@@ -6,5 +6,5 @@ BASE_DIR = os.getcwd()
 
 
 # We can choose between JsonFile or CsvFile
-DATABASE_FILE_PATH = Path(BASE_DIR, "data")
+DATABASE_FILE_PATH = Path(BASE_DIR, "data.csv")
 DATABASE = CSVDB(DATABASE_FILE_PATH)
