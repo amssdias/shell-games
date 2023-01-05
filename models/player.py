@@ -10,7 +10,7 @@ class Player():
         self.age = self.validate_age(input("Age: "))
         self.email = self.validate_email(input("Email address (don't worry, we won't spam you): "))
         
-        self.user = self.db.save_user(self.name, self.age, self.email)
+        self.user = self.db.create_user(self.name, self.age, self.email)
 
     def validate_name(self, name):
         if not isinstance(name, str):
@@ -38,3 +38,6 @@ class Player():
             email = input("Email not valid.\nEmail: ")
 
         return email
+
+    def update_games_played(self):
+        return self.db.update_user(self.user, "games_played")
