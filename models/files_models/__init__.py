@@ -1,2 +1,2 @@
-from .csv_model import CSVFile
-from .json_model import JsonFile
+from .csv_file import CSVFile
+from .json_file import JsonFile

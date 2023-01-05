@@ -1,7 +1,7 @@
 from pathlib import Path
 from models.abstract import DB
 from models.files_models import JsonFile
-from models.files_models.csv_model import CSVFile
+from models.files_models.csv_file import CSVFile
 
 
 class FileDB(DB):

@@ -38,5 +38,6 @@ class CSVFile:
                         user["games_played"] = int(user["games_played"]) + 1
                     except TypeError as e:
                         raise TypeError(e)
+                    player = user
                 writer.writerow(user)
-        return True
+        return player

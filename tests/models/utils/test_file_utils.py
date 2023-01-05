@@ -9,24 +9,30 @@ class TestFile(unittest.TestCase):
         self.user_1 = {
             "name": "testing",
             "age": "20",
-            "email": "testing@bogusemail.com"
+            "email": "testing@bogusemail.com",
+            "score": "0",
+            "games_played": "0",
         }
         self.user_2 = {
             "name": "Mary",
             "age": "23",
-            "email": "maryjacobs@bogusemail.com"
+            "email": "maryjacobs@bogusemail.com",
+            "score": "0",
+            "games_played": "0",
         }
+
+        self.fieldnames = ["name", "age", "email", "score", "games_played"]
 
         self.users = [self.user_1, self.user_2]
 
     def write_data_to_csv(self):
         with open(self.file_directory, "a", newline="") as write_file:
-            writer = csv.DictWriter(write_file, fieldnames=["name", "age", "email"], delimiter=",")
+            writer = csv.DictWriter(write_file, fieldnames=self.fieldnames, delimiter=",")
             writer.writerows([self.user_1, self.user_2])
     
     def delete_data_from_csv(self):
         with open(self.file_directory, "w", newline="") as write_file:
-            writer = csv.DictWriter(write_file, fieldnames=["name", "age", "email"], delimiter=",")
+            writer = csv.DictWriter(write_file, fieldnames=self.fieldnames, delimiter=",")
             writer.writeheader()
 
     def write_data_to_json(self):

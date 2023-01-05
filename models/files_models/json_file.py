@@ -33,7 +33,11 @@ class JsonFile:
         with open(self.file_path, "w") as json_file:
             for user in users:
                 if user["email"] == player["email"]:
-                    user["games_played"] = int(user["games_played"]) + 1
+                    try:
+                        user["games_played"] = int(user["games_played"]) + 1
+                    except TypeError as e:
+                        raise TypeError(e)
+                    player = user
                     break
             json.dump(users, json_file, indent=2)
-        return True
+        return player
