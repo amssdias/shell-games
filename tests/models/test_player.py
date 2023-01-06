@@ -1,4 +1,5 @@
 from pathlib import Path
+from threading import Thread
 import unittest
 from unittest.mock import patch
 
@@ -9,9 +10,10 @@ from models.player import Player
 
 
 class TestPlayer(unittest.TestCase):
-
     @patch.object(models.file_model.FileDB, "create_user")
-    @patch("models.player.input", side_effect=["testing", "20", "testing@fakeemail.com"])
+    @patch(
+        "models.player.input", side_effect=["testing", "20", "testing@fakeemail.com"]
+    )
     def setUp(self, mocked_input, mocked_save_user) -> None:
         file_path = Path(Path.cwd(), "tests", "models", "db", "testing.csv")
         self.db = CSVDB(file_path=file_path)
@@ -51,7 +53,7 @@ class TestPlayer(unittest.TestCase):
             with self.assertRaises(TypeError) as msg:
                 self.player.validate_name(name)
             self.assertEqual(str(msg.exception), f"Input {name} must be a str.")
-        
+
     def test_validate_age(self):
         with patch("models.player.input") as mocked_input:
             mocked_input.side_effect = ["123", "a2s", "2e", "000", "10"]
@@ -73,19 +75,46 @@ class TestPlayer(unittest.TestCase):
 
     def test_validate_email(self):
         with patch("models.player.input") as mocked_input:
-            mocked_input.side_effect = ["ad.hotmail.com", "other.-@.com", "testing@fake-email.com"]
+            mocked_input.side_effect = [
+                "ad.hotmail.com",
+                "other.-@.com",
+                "testing@fake-email.com",
+            ]
             email = self.player.validate_email("1234")
             self.assertEqual(email, "testing@fake-email.com")
 
     def test_validate_email_strip(self):
-        self.assertEqual(self.player.validate_email("testing@fake-email.com  "), "testing@fake-email.com")
-        self.assertEqual(self.player.validate_email("  testing@fake-email.com"), "testing@fake-email.com")
-        self.assertEqual(self.player.validate_email("  testing@fake-email.com  "), "testing@fake-email.com")
+        self.assertEqual(
+            self.player.validate_email("testing@fake-email.com  "),
+            "testing@fake-email.com",
+        )
+        self.assertEqual(
+            self.player.validate_email("  testing@fake-email.com"),
+            "testing@fake-email.com",
+        )
+        self.assertEqual(
+            self.player.validate_email("  testing@fake-email.com  "),
+            "testing@fake-email.com",
+        )
 
     def test_validate_email_exception(self):
-        emails = [1234, ["testing@fake-email.com"], {"testing@fake-email.com"}, {"email": "testing@fake-email.com"}]
+        emails = [
+            1234,
+            ["testing@fake-email.com"],
+            {"testing@fake-email.com"},
+            {"email": "testing@fake-email.com"},
+        ]
 
         for email in emails:
             with self.assertRaises(TypeError) as msg:
                 self.player.validate_email(email)
             self.assertEqual(str(msg.exception), f"Input {email} must be a str.")
+
+    def test_update_games_played(self):
+        with patch("models.file_model.FileDB.update_user") as mocked_upate_user:
+            mocked_upate_user.return_value = True
+            thread_1 = Thread(target=self.player.update_games_played)
+            thread_1.start()
+            thread_1.join()
+
+            self.assertFalse(thread_1.is_alive())

@@ -1,16 +1,19 @@
 import re
+from threading import Thread
 
 from models.abstract import DB
 from models.constants.database_actions import DatabaseActions
 
 
-class Player():
+class Player:
     def __init__(self, db: DB):
         self.db = db
         self.name = self.validate_name(input("Hey, what's your name? "))
         self.age = self.validate_age(input("Age: "))
-        self.email = self.validate_email(input("Email address (don't worry, we won't spam you): "))
-        
+        self.email = self.validate_email(
+            input("Email address (don't worry, we won't spam you): ")
+        )
+
         self.user = self.db.create_user(self.name, self.age, self.email)
 
     def validate_name(self, name):
@@ -21,12 +24,12 @@ class Player():
     def validate_age(self, age):
         if not isinstance(age, str):
             raise TypeError(f"Input {age} must be a str.")
-        
+
         # TODO: Validate age is not "00", "01".. till 10 (not included), add tests
         age = age.strip()
         while not age.isnumeric() or len(age) > 2:
             age = input("Age must be a number. Type again: ")
-        
+
         return age.strip()
 
     def validate_email(self, email):
@@ -41,4 +44,8 @@ class Player():
         return email
 
     def update_games_played(self):
-        return self.db.update_user(self.user, DatabaseActions.GAMES_PLAYED)
+        update_user_thread = Thread(
+            target=self.db.update_user, args=[self.user, DatabaseActions.GAMES_PLAYED]
+        )
+        update_user_thread.start()
+        return update_user_thread
