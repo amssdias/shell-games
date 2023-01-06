@@ -1,5 +1,6 @@
 from pathlib import Path
 from models.abstract import DB
+from models.constants.database_actions import DatabaseActions
 from models.files_models import JsonFile
 from models.files_models.csv_file import CSVFile
 
@@ -31,8 +32,8 @@ class FileDB(DB):
                 return True
         return False
 
-    def update_user(self, player, action: str):
-        if action == "games_played":
+    def update_user(self, player, action: DatabaseActions):
+        if action == DatabaseActions.GAMES_PLAYED:
             return self.db.update_user_games_played(player)
 
 
@@ -61,6 +62,3 @@ class CSVDB(FileDB):
             raise Exception("File path does not exist.")
         return True
 
-
-class BinaryDB(FileDB):
-    pass

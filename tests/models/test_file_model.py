@@ -3,6 +3,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from models.abstract import DB
+from models.constants.database_actions import DatabaseActions
 from models.file_model import FileDB
 from models.files_models import CSVFile
 from tests.models.utils.test_file_utils import TestFile
@@ -18,6 +19,7 @@ class TestFileModel(TestFile):
         self.assertIsInstance(self.db, DB)
         self.assertIsInstance(self.db.db, CSVFile)
 
+    def test_initial_values(self):
         db_initial_variables = self.db.__dict__.keys()
         self.assertIn("db", db_initial_variables)
 
@@ -63,4 +65,9 @@ class TestFileModel(TestFile):
         self.assertFalse(self.db.user_exists("nouser@bogusemail.com"))
 
         self.delete_data_from_csv()
+
+    def test_update_user_games_played(self):
+        user = self.db.update_user(self.user_1, DatabaseActions.GAMES_PLAYED)
+        self.user_1["games_played"] = "1"
+        self.assertEqual(user, self.user_1)
 

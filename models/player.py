@@ -1,6 +1,7 @@
 import re
 
 from models.abstract import DB
+from models.constants.database_actions import DatabaseActions
 
 
 class Player():
@@ -40,4 +41,4 @@ class Player():
         return email
 
     def update_games_played(self):
-        return self.db.update_user(self.user, "games_played")
+        return self.db.update_user(self.user, DatabaseActions.GAMES_PLAYED)
