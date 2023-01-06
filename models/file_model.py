@@ -35,6 +35,8 @@ class FileDB(DB):
     def update_user(self, player, action: DatabaseActions):
         if action == DatabaseActions.GAMES_PLAYED:
             return self.db.update_user_games_played(player)
+        elif action == DatabaseActions.SCORE:
+            return self.db.update_user_score(player)
 
 
 class JsonDB(FileDB):

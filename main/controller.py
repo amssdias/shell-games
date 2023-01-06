@@ -59,6 +59,7 @@ class Controller:
 
     def display_result(self, won: bool):
         if won:
+            self.player.update_score()
             print(Fore.GREEN + "You Won!!! :D")
         else:
             print(Fore.RED + "You lost!!! :(")

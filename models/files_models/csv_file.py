@@ -1,5 +1,7 @@
 import csv
 
+from models.constants.database_actions import DatabaseActions
+
 
 class CSVFile:
 
@@ -36,6 +38,22 @@ class CSVFile:
                 if user["email"] == player["email"]:
                     try:
                         user["games_played"] = int(user["games_played"]) + 1
+                    except TypeError as e:
+                        raise TypeError(e)
+                    player = user
+                writer.writerow(user)
+        return player
+
+    def update_user_score(self, player):
+        users = self.get_all_users()
+
+        with open(self.file_path, "w", newline="") as update_csv:
+            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email", "score", "games_played"], delimiter=",")
+            writer.writeheader()
+            for user in users:
+                if user["email"] == player["email"]:
+                    try:
+                        user["score"] = int(user["score"]) + 1
                     except TypeError as e:
                         raise TypeError(e)
                     player = user

@@ -6,3 +6,4 @@ class DatabaseActions(Enum):
         return name.lower()
 
     GAMES_PLAYED = auto()
+    SCORE = auto()

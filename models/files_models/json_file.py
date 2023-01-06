@@ -41,3 +41,17 @@ class JsonFile:
                     break
             json.dump(users, json_file, indent=2)
         return player
+
+    def update_user_score(self, player):
+        users = self.get_all_users()
+        with open(self.file_path, "w") as json_file:
+            for user in users:
+                if user["email"] == player["email"]:
+                    try:
+                        user["score"] = int(user["score"]) + 1
+                    except TypeError as e:
+                        raise TypeError(e)
+                    player = user
+                    break
+            json.dump(users, json_file, indent=2)
+        return player

@@ -1,8 +1,8 @@
 import re
-from threading import Thread
 
 from models.abstract import DB
 from models.constants.database_actions import DatabaseActions
+from tasks.thread_tasks import ThreadTask
 
 
 class Player:
@@ -44,8 +44,7 @@ class Player:
         return email
 
     def update_games_played(self):
-        update_user_thread = Thread(
-            target=self.db.update_user, args=[self.user, DatabaseActions.GAMES_PLAYED]
-        )
-        update_user_thread.start()
-        return update_user_thread
+        ThreadTask.task(self.db.update_user, self.user, DatabaseActions.GAMES_PLAYED)
+
+    def update_score(self):
+        ThreadTask.task(self.db.update_user, self.user, DatabaseActions.SCORE)
