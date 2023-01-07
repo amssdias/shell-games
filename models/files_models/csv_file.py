@@ -7,6 +7,7 @@ class CSVFile:
 
     def __init__(self, file_path):
         self.file_path = file_path
+        self.fieldnames = ["email", "age", "password", "score", "games_played"]
 
     def get_all_users(self):
         opened_file = open(self.file_path, "r")
@@ -24,7 +25,7 @@ class CSVFile:
 
     def save_user(self, user: dict):
         with open(self.file_path, "a", newline="") as update_csv:
-            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email", "score", "games_played"], delimiter=",")
+            writer = csv.DictWriter(update_csv, fieldnames=self.fieldnames, delimiter=",")
             writer.writerow(user)
         return True
     
@@ -32,7 +33,7 @@ class CSVFile:
         users = self.get_all_users()
 
         with open(self.file_path, "w", newline="") as update_csv:
-            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email", "score", "games_played"], delimiter=",")
+            writer = csv.DictWriter(update_csv, fieldnames=self.fieldnames, delimiter=",")
             writer.writeheader()
             for user in users:
                 if user["email"] == player["email"]:

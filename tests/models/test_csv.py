@@ -33,9 +33,9 @@ class TestCSVFile(TestFile):
 
     def test_save_user(self):
         user = {
-            "name": "new user",
+            "email": "new-user@fake-email.com",
             "age": "22",
-            "email": "new-user@fake-email.com"
+            "password": "password",
         }
         saved_user = self.db.save_user(user)
         self.assertTrue(saved_user)

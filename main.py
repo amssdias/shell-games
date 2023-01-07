@@ -1,9 +1,7 @@
-from main import settings
 from main.controller import Controller
+from main.menu import Menu
 
-from models.player import Player
 
-
-player_model = Player(settings.DATABASE)
-c = Controller(player_model)
+player = Menu().player
+c = Controller(player)
 c.start()

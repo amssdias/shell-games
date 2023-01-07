@@ -15,7 +15,7 @@ class Controller:
         self.player = player
 
     def start(self):
-        print(Fore.YELLOW + f"Hello {self.player.name}!")
+        print(Fore.YELLOW + f"Hello :D!")
 
         while True:
             print("Which game you would like to play?")

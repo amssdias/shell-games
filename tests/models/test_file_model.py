@@ -25,9 +25,9 @@ class TestFileModel(TestFile):
 
     def test_create_user(self):
         user = {
-            "name": "new user",
-            "age": "22",
             "email": "new-user@fake-email.com",
+            "age": "22",
+            "password": "password",
         }
         new_user = self.db.create_user(**user)
         self.assertTrue(new_user)
@@ -47,9 +47,9 @@ class TestFileModel(TestFile):
     def test_create_existing_user(self):
         self.write_data_to_csv()
         user = {
-            "name": self.user_1["name"],
-            "age": self.user_1["age"],
             "email": self.user_1["email"],
+            "age": self.user_1["age"],
+            "password": self.user_1["password"]
         }
         with patch("models.file_model.print") as mocked_print:
             new_user = self.db.create_user(**user)
