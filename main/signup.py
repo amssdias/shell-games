@@ -28,15 +28,14 @@ class Signup(Password):
         player.register_player(**user)
         return player
 
-    @staticmethod
-    def validate_email(email):
+    def validate_email(self, email):
         if not isinstance(email, str):
             raise TypeError(f"Input {email} must be a str.")
 
         # TODO: Check if email doesn't exist already
         email = email.strip()
         email_regex = re.compile(r"@[a-zA-Z-\d]+\.(com|net|es|org)$")
-        while not email_regex.search(email):
+        while not email_regex.search(email) or self.db.user_exists(email):
             email = input("Email not valid.\nEmail: ")
 
         return email
@@ -58,9 +57,12 @@ class Signup(Password):
         password_1 = getpass("Enter your password again: ")
 
         while password != password_1 or len(password) < 8:
-            print(Fore.RED + "Passwords mismatch!")
-            password = input("Enter your password: ")
-            password_1 = input("Enter your password again: ")
+            if len(password) < 8:
+                print(Fore.RED + "Password too short.")
+            else:
+                print(Fore.RED + "Passwords mismatch!")
+            password = getpass("Enter your password: ")
+            password_1 = getpass("Enter your password again: ")
 
         hashed_password = self.hash_password(password)
 

@@ -51,6 +51,18 @@ class TestSignup(unittest.TestCase):
                 self.signup.validate_email(email)
             self.assertEqual(str(msg.exception), f"Input {email} must be a str.")
 
+    @patch("main.signup.print")
+    @patch("main.signup.input", return_value="testing1@hotmail.com")
+    def test_validate_email_exists(self, mocked_input, mocked_print):
+        user = {
+            "email": "testing@hotmail.com",
+            "age": 23,
+            "password": "randompassword"
+        }
+        self.signup.db.create_user(**user)
+
+        self.assertEqual(self.signup.validate_email(user["email"]), "testing1@hotmail.com")
+
     def test_validate_age(self):
         with patch("main.signup.input") as mocked_input:
             mocked_input.side_effect = ["123", "a2s", "2e", "000", "10"]
@@ -69,3 +81,21 @@ class TestSignup(unittest.TestCase):
             with self.assertRaises(TypeError) as msg:
                 self.signup.validate_age(age)
             self.assertEqual(str(msg.exception), f"Input {age} must be a str.")
+
+    
+    @patch("main.password.Password.hash_password", return_value="password123.")
+    @patch("main.signup.getpass", side_effect=["password123.", "password123."])
+    def test_validate_password(self, mocked_getpass, mocked_hashed_password):
+        self.assertEqual(self.signup.validate_password(), "password123.")
+
+    @patch("main.signup.print")
+    @patch("main.password.Password.hash_password", return_value="password123.")
+    @patch("main.signup.getpass", side_effect=["password123.", "password123", "password123.", "password123."])
+    def test_validate_password_mismatch(self, mocked_getpass, mocked_hashed_password, mocked_print):
+        self.assertEqual(self.signup.validate_password(), "password123.")
+
+    @patch("main.signup.print")
+    @patch("main.password.Password.hash_password", return_value="12345678")
+    @patch("main.signup.getpass", side_effect=["1234567", "1234567", "12345678", "12345678"])
+    def test_validate_password_short_length(self, mocked_getpass, mocked_hashed_password, mocked_print):
+        self.assertEqual(self.signup.validate_password(), "12345678")
