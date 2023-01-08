@@ -10,7 +10,7 @@ class Password:
         return self.get_hashed_password(salted_password)
 
     def salt_password(self, password_encoded):
-        return password_encoded + SECRET_KEY.encode(self.encode_format)
+        return str(password_encoded + SECRET_KEY).encode(self.encode_format)
 
     def get_hashed_password(self, salted_password):
         hash_object = hashlib.sha256()

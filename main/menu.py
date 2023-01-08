@@ -19,21 +19,26 @@ class Menu:
 
     def __init__(self):
         self.display_welcome_message()
-        user = self.initial_menu()
-        self.player = Player(settings.DATABASE, **user)
 
-    def initial_menu(self):
+        self.player = Player(settings.DATABASE)
+        while not self.player.logged:
+            self.initial_menu(self.player)
+
+
+    def initial_menu(self, player):
         while True:
             self.display_initial_menu()
             validated_user_option = self.get_user_option()
-            if not validated_user_option:
-                continue
-            return validated_user_option.run()
+            if validated_user_option:
+                break
+
+        validated_user_option.run(player)
 
     def display_welcome_message(self):
-        print(Fore.GREEN + "Hi, welcome to shell games!\nWhat would you like to do?")
+        print(Fore.GREEN + "Hi, welcome to shell games!")
 
     def display_initial_menu(self):
+        print(Fore.GREEN + "What would you like to do?")
         for option in menu_options.keys():
             print(f"- {Fore.CYAN}{option}")
 

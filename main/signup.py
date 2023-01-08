@@ -1,5 +1,6 @@
 import colorama
 from colorama import Fore
+from getpass import getpass
 import re
 
 from main.password import Password
@@ -12,7 +13,7 @@ class Signup(Password):
     def __init__(self):
         self.db = settings.DATABASE
 
-    def run(self):
+    def run(self, player):
         email = self.validate_email(
             input("Email address (don't worry, we won't spam you): ")
         )
@@ -24,7 +25,8 @@ class Signup(Password):
             "password": password,
         }
         self.db.create_user(**user)
-        return user
+        player.register_player(**user)
+        return player
 
     @staticmethod
     def validate_email(email):
@@ -52,8 +54,8 @@ class Signup(Password):
         return age.strip()
 
     def validate_password(self):
-        password = input("Enter your password: ")
-        password_1 = input("Enter your password again: ")
+        password = getpass("Enter your password: ")
+        password_1 = getpass("Enter your password again: ")
 
         while password != password_1 or len(password) < 8:
             print(Fore.RED + "Passwords mismatch!")

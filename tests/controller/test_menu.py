@@ -19,13 +19,18 @@ class TestMenu(unittest.TestCase):
         menu_initialize_variables = self.menu.__dict__.keys()
         self.assertIn("player", menu_initialize_variables)
 
-    def test_initial_menu(self):
+    def _test_initial_menu(self):
         pass
     
     @patch("main.menu.print")
+    def test_display_welcome_message(self, mocked_print):
+        self.menu.display_welcome_message()
+        self.assertEqual(mocked_print.mock_calls[0].args[0], Fore.GREEN + "Hi, welcome to shell games!")
+
+    @patch("main.menu.print")
     def test_display_initial_menu(self, mocked_print):
         self.menu.display_initial_menu()
-        values_printed = []
+        values_printed = [Fore.GREEN + "What would you like to do?"]
         for option in menu_options:
             values_printed.append(f"- {Fore.CYAN}{option}")
 

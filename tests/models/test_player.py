@@ -18,7 +18,7 @@ class TestPlayer(unittest.TestCase):
             "age": "23",
             "password": "password",
         }
-        self.player = Player(self.db, **self.user)
+        self.player = Player(self.db)
 
     def test_initialize(self):
         player_initial_variables = self.player.__dict__.keys()
@@ -28,16 +28,17 @@ class TestPlayer(unittest.TestCase):
         self.assertIn("password", player_initial_variables)
 
         self.assertIsInstance(self.player.db, DB)
-        self.assertIsInstance(self.player.email, str)
-        self.assertIsInstance(self.player.age, str)
-        self.assertIsInstance(self.player.password, str)
 
         self.assertEqual(self.player.db, self.db)
-        self.assertEqual(self.player.email, "testing@hotmail.com")
-        self.assertEqual(self.player.age, "23")
-        self.assertEqual(self.player.password, "password")
+        self.assertEqual(self.player.email, None)
+        self.assertEqual(self.player.age, None)
+        self.assertEqual(self.player.password, None)
+
+    def test_register_player(self):
+        pass 
 
     def test_update_games_played(self):
+        self.player.register_player(**self.user)
         with patch("models.file_model.FileDB.update_user") as mocked_upate_user:
             mocked_upate_user.return_value = True
             thread_1 = Thread(target=self.player.update_games_played)
