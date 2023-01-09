@@ -5,6 +5,7 @@ import re
 
 from main.password import Password
 from main import settings
+from models.player import Player
 
 colorama.init(autoreset=True)
 
@@ -13,7 +14,7 @@ class Signup(Password):
     def __init__(self):
         self.db = settings.DATABASE
 
-    def run(self, player):
+    def run(self, player: Player):
         email = self.validate_email(
             input("Email address (don't worry, we won't spam you): ")
         )
@@ -32,7 +33,6 @@ class Signup(Password):
         if not isinstance(email, str):
             raise TypeError(f"Input {email} must be a str.")
 
-        # TODO: Check if email doesn't exist already
         email = email.strip()
         email_regex = re.compile(r"@[a-zA-Z-\d]+\.(com|net|es|org)$")
         while not email_regex.search(email) or self.db.user_exists(email):
