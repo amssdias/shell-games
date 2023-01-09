@@ -25,7 +25,7 @@ class Menu:
             self.initial_menu(self.player)
 
 
-    def initial_menu(self, player):
+    def initial_menu(self, player: Player):
         while True:
             self.display_initial_menu()
             validated_user_option = self.get_user_option()

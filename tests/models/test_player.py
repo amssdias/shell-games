@@ -32,13 +32,29 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player.password, None)
 
     def test_register_player(self):
-        pass 
+        player = {"email": "test@example.com", "age": "20", "password": "password"}
+        result = self.player.register_player(**player)
+
+        self.assertEqual(result, None)
+        self.assertEqual(self.player.email, player["email"])
+        self.assertEqual(self.player.age, player["age"])
+        self.assertEqual(self.player.password, player["password"])
 
     def test_update_games_played(self):
         self.player.register_player(**self.user)
         with patch("models.file_model.FileDB.update_user") as mocked_upate_player:
             mocked_upate_player.return_value = True
             thread_1 = Thread(target=self.player.update_games_played)
+            thread_1.start()
+            thread_1.join()
+
+            self.assertFalse(thread_1.is_alive())
+
+    def test_update_score(self):
+        self.player.register_player(**self.user)
+        with patch("models.file_model.FileDB.update_user") as mocked_upate_player:
+            mocked_upate_player.return_value = True
+            thread_1 = Thread(target=self.player.update_score)
             thread_1.start()
             thread_1.join()
 
