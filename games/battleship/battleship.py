@@ -1,5 +1,6 @@
 import random
 import string
+from typing import List, Set
 
 from colorama import Fore
 from games.battleship.battleshipdraw import BattleShipDraw
@@ -35,18 +36,18 @@ class BattleShip(Game, BattleShipDraw):
         self.user_points = 0
         self.battlefield = []
 
-    def build_battlefield(self):
+    def build_battlefield(self) -> List:
         """Build battlefield to print out."""
         battle_field = [["." for _ in range(10)] for _ in range(10)]
         return battle_field
 
-    def start_game_settings(self):
+    def start_game_settings(self) -> None:
         self.user_points = 70
         self.set_ships_positions()
         self.battlefield = self.build_battlefield()
         print(Fore.YELLOW + "Instructions: You should call your move like: D-4/4-D.")
 
-    def set_ships_positions(self):
+    def set_ships_positions(self) -> None:
         """Randomly create positions for each ship."""
 
         for ship, value in self.ships.items():
@@ -80,7 +81,7 @@ class BattleShip(Game, BattleShipDraw):
             self.ships_positions.update(ship_positions)
             self.ships[ship]["position"].update(ship_positions)
 
-    def get_ship_positions_horizontal(self, ship_size, ship_column, ship_row):
+    def get_ship_positions_horizontal(self, ship_size, ship_column, ship_row) -> Set:
         if ship_column + ship_size > 9:
             # Go towards back of row
             return {
@@ -95,7 +96,7 @@ class BattleShip(Game, BattleShipDraw):
                 for column in range(ship_column, ship_column + ship_size)
             }
 
-    def get_ship_positions_vertically(self, ship_size, ship_column, ship_row):
+    def get_ship_positions_vertically(self, ship_size, ship_column, ship_row) -> Set:
         if ship_row + ship_size > 9:
             # Go towards up
             return {
@@ -105,7 +106,7 @@ class BattleShip(Game, BattleShipDraw):
             # Go towards down
             return {(row, ship_column) for row in range(ship_row, ship_row + ship_size)}
 
-    def start_game(self):
+    def start_game(self) -> bool:
 
         while True:
             self.print_battlefield()
@@ -170,7 +171,7 @@ class BattleShip(Game, BattleShipDraw):
                 print(f"Hit! {Fore.RED + ship_name.capitalize()}.")
                 break
 
-    def check_user_won(self):
+    def check_user_won(self) -> bool:
         if not self.ships_positions:
             return True
         return False
