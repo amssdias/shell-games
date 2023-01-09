@@ -17,8 +17,8 @@ class FileDB(DB):
             "email": email,
             "age": age,
             "password": password,
-            "score": "0",
-            "games_played": "0",
+            "score": 0,
+            "games_played": 0,
         }
         self.db.save_user(user)
         return user

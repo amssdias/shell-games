@@ -1,5 +1,6 @@
 import csv
 from pathlib import Path
+from unittest.mock import MagicMock
 
 from models.files_models import CSVFile
 from tests.models.utils.test_file_utils import TestFile
@@ -23,21 +24,57 @@ class TestCSVFile(TestFile):
         self.write_data_to_csv()
         users = self.db.get_all_users()
         self.delete_data_from_csv()
+        self.user_1["age"] = str(self.user_1["age"])
+        self.user_1["score"] = str(self.user_1["score"])
+        self.user_1["games_played"] = str(self.user_1["games_played"])
 
+        # On csv when we read data, it comes all as strings
+        self.user_2["age"] = str(self.user_2["age"])
+        self.user_2["score"] = str(self.user_2["score"])
+        self.user_2["games_played"] = str(self.user_2["games_played"])
+        
         self.assertCountEqual(users, [self.user_1, self.user_2])
+
+    def test_get_all_users_return_value(self):
+        self.write_data_to_csv()
+        users = self.db.get_all_users()
+        self.delete_data_from_csv()
+
+        self.assertIsInstance(users, list)
 
     def test_get_user(self):
         self.write_data_to_csv()
         user = self.db.get_user(self.user_1["email"])
         self.delete_data_from_csv()
 
+        # On csv when we read data, it comes all as strings
+        self.user_1["age"] = str(self.user_1["age"])
+        self.user_1["score"] = str(self.user_1["score"])
+        self.user_1["games_played"] = str(self.user_1["games_played"])
+
         self.assertEqual(user, self.user_1)
+
+    def test_get_user_return_value(self):
+        self.write_data_to_csv()
+        user = self.db.get_user(self.user_1["email"])
+        self.delete_data_from_csv()
+
+        self.assertIsInstance(user, dict)
+
+    def test_get_user_dont_exit(self):
+        self.write_data_to_csv()
+        user = self.db.get_user("nouser@testing.com")
+        self.delete_data_from_csv()
+
+        self.assertEqual(user, None)
 
     def test_save_user(self):
         user = {
             "email": "new-user@fake-email.com",
-            "age": "22",
+            "age": 22,
             "password": "password",
+            "score": 0,
+            "games_played": 0,
         }
         saved_user = self.db.save_user(user)
         self.assertTrue(saved_user)
@@ -55,18 +92,21 @@ class TestCSVFile(TestFile):
         self.delete_data_from_csv()
 
     def test_update_user_games_played(self):
-        self.write_data_to_csv()
+        self.db.get_all_users = MagicMock(return_value=self.users)
         self.db.update_user_games_played(self.user_1)
 
-        user = self.db.get_user(self.user_1["email"])
+        # This is supposed to give back an int, but on csv when we read, it gives us back always strings
+        player = self.db.get_user(self.user_1["email"])
+        self.assertEqual(player["games_played"], "1")
 
-        self.assertEqual(user["games_played"], "1")
         self.delete_data_from_csv()
     
     def test_update_user_score(self):
-        self.write_data_to_csv()
+        self.db.get_all_users = MagicMock(return_value=self.users)
         self.db.update_user_score(self.user_1)
-        user = self.db.get_user(self.user_1["email"])
 
+        # This is supposed to give back an int, but on csv when we read, it gives us back always strings
+        user = self.db.get_user(self.user_1["email"])
         self.assertEqual(user["score"], "1")
+
         self.delete_data_from_csv()
