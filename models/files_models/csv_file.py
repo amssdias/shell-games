@@ -29,7 +29,7 @@ class CSVFile:
             writer.writerow(user)
         return True
     
-    def update_user_games_played(self, player):
+    def update_user_games_played(self, player: dict):
         users = self.get_all_users()
 
         with open(self.file_path, "w", newline="") as update_csv:
@@ -45,11 +45,11 @@ class CSVFile:
                 writer.writerow(user)
         return player
 
-    def update_user_score(self, player):
+    def update_user_score(self, player: dict):
         users = self.get_all_users()
 
         with open(self.file_path, "w", newline="") as update_csv:
-            writer = csv.DictWriter(update_csv, fieldnames=["name", "age", "email", "score", "games_played"], delimiter=",")
+            writer = csv.DictWriter(update_csv, fieldnames=self.fieldnames, delimiter=",")
             writer.writeheader()
             for user in users:
                 if user["email"] == player["email"]:

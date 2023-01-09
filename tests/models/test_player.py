@@ -6,13 +6,13 @@ from unittest.mock import patch
 from models.abstract import DB
 from models.file_model import CSVDB
 from models.player import Player
+from tests.models.utils.testing_db import TestDBCSV
 
 
 class TestPlayer(unittest.TestCase):
 
     def setUp(self) -> None:
-        file_path = Path(Path.cwd(), "tests", "models", "db", "testing.csv")
-        self.db = CSVDB(file_path=file_path)
+        self.db = TestDBCSV()
         self.user = {
             "email": "testing@hotmail.com",
             "age": "23",

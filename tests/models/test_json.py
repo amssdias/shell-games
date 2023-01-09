@@ -13,6 +13,7 @@ class TestJsonFile(TestFile):
 
     def test_initial_data(self):
         json_initial_variables = self.db.__dict__.keys()
+
         self.assertIn("file_path", json_initial_variables)
         self.assertIsInstance(self.db.file_path, Path)
         self.assertEqual(self.db.file_path, self.file_directory)
@@ -26,10 +27,10 @@ class TestJsonFile(TestFile):
 
     def test_get_user(self):
         self.write_data_to_json()
-        user = self.db.get_user(self.user_1["email"])
+        result = self.db.get_user(self.user_1["email"])
         self.delete_data_from_json()
 
-        self.assertEqual(user, self.user_1)
+        self.assertEqual(result, self.user_1)
 
     def test_save_user(self):
         user = {
@@ -60,4 +61,14 @@ class TestJsonFile(TestFile):
 
         # We get an int because we loading json data
         self.assertEqual(user["games_played"], 1)
+        self.delete_data_from_json()
+
+    def test_update_user_score(self):
+        self.write_data_to_json()
+        self.db.update_user_score(self.user_1)
+
+        user = self.db.get_user(self.user_1["email"])
+
+        # We get an int because we loading json data
+        self.assertEqual(user["score"], 1)
         self.delete_data_from_json()

@@ -13,7 +13,9 @@ class TestCSVFile(TestFile):
 
     def test_initial_data(self):
         csv_initial_variables = self.db.__dict__.keys()
+
         self.assertIn("file_path", csv_initial_variables)
+        self.assertIn("fieldnames", csv_initial_variables)
         self.assertIsInstance(self.db.file_path, Path)
         self.assertEqual(self.db.file_path, self.file_directory)
 
@@ -59,4 +61,12 @@ class TestCSVFile(TestFile):
         user = self.db.get_user(self.user_1["email"])
 
         self.assertEqual(user["games_played"], "1")
+        self.delete_data_from_csv()
+    
+    def test_update_user_score(self):
+        self.write_data_to_csv()
+        self.db.update_user_score(self.user_1)
+        user = self.db.get_user(self.user_1["email"])
+
+        self.assertEqual(user["score"], "1")
         self.delete_data_from_csv()

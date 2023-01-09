@@ -12,7 +12,6 @@ class FileDB(DB):
 
     def create_user(self, email: str, age: str, password: str):
         if self.user_exists(email):
-            print("Seems like you have been here before. Enjoy :D")
             return self.db.get_user(email)
 
         user = {

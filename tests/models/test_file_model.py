@@ -1,6 +1,6 @@
 import csv
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from models.abstract import DB
 from models.constants.database_actions import DatabaseActions
@@ -24,50 +24,45 @@ class TestFileModel(TestFile):
         self.assertIn("db", db_initial_variables)
 
     def test_create_user(self):
+        self.db.db.save_user = MagicMock(return_value=None)
+        self.db.user_exists = MagicMock(return_value=False)
         user = {
             "email": "new-user@fake-email.com",
             "age": "22",
             "password": "password",
         }
         new_user = self.db.create_user(**user)
-        self.assertTrue(new_user)
 
-        # Check user was added to file
-        with open(self.file_directory, "r") as testing_file:
-            read_file = csv.DictReader(testing_file, delimiter=",")
-            for line in read_file:
-                if line["email"] == user["email"]:
-                    self.assertEqual(line["email"], user["email"])
-                    break
-            else:
-                assert False, "User was not saved to the file"
+        self.assertTrue(new_user)
+        self.db.db.save_user.assert_called_once()
 
         self.delete_data_from_csv()
 
     def test_create_existing_user(self):
-        self.write_data_to_csv()
-        user = {
-            "email": self.user_1["email"],
-            "age": self.user_1["age"],
-            "password": self.user_1["password"]
-        }
-        with patch("models.file_model.print") as mocked_print:
-            new_user = self.db.create_user(**user)
-        
+        self.db.user_exists = MagicMock(return_value=True)
+        self.db.db.get_user = MagicMock(return_value=self.user_1)
+        user = self.user_1.copy()
+        del user["score"]
+        del user["games_played"]
+        new_user = self.db.create_user(**user)
+
         self.assertEqual(new_user, self.user_1)
-        self.delete_data_from_csv()
 
     def test_user_exists(self):
-        self.write_data_to_csv()
+        self.db.db.get_all_users = MagicMock(return_value=self.users)
 
         self.assertTrue(self.db.user_exists(self.user_1["email"]))
         self.assertTrue(self.db.user_exists(self.user_2["email"]))
         self.assertFalse(self.db.user_exists("nouser@bogusemail.com"))
 
-        self.delete_data_from_csv()
+    def test_update_user_games_played(self):
+        self.db.db.update_user_games_played = MagicMock()
+        self.db.update_user(self.user_1, DatabaseActions.GAMES_PLAYED)
+        
+        self.db.db.update_user_games_played.assert_called_once()
 
     def test_update_user_games_played(self):
-        user = self.db.update_user(self.user_1, DatabaseActions.GAMES_PLAYED)
-        self.user_1["games_played"] = "1"
-        self.assertEqual(user, self.user_1)
-
+        self.db.db.update_user_score = MagicMock()
+        self.db.update_user(self.user_1, DatabaseActions.SCORE)
+        
+        self.db.db.update_user_score.assert_called_once()
