@@ -1,11 +1,8 @@
-from pathlib import Path
 from threading import Thread
 import unittest
 from unittest.mock import patch
 
-from models.abstract import DB
-from models.file_model import CSVDB
-from models.player import Player
+from models import DB, CSVDB, Player
 from tests.models.utils.testing_db import TestDBCSV
 
 

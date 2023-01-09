@@ -1,4 +1,6 @@
-from .files_models import *
-from .player import Player
-from .file_model import FileDB, JsonDB, CSVDB
 from .abstract import DB
+from .csv_model import CSVDB
+from .files_models import *
+from .file_model import FileDB
+from .json_model import JsonDB
+from .player import Player
