@@ -1,5 +1,5 @@
 import unittest
-from unittest.mock import Mock, patch, MagicMock
+from unittest.mock import patch, MagicMock
 
 from main.signup import Signup
 from models.player import Player
@@ -44,6 +44,13 @@ class TestSignup(unittest.TestCase):
 
         self.assertEqual(result, "valid@hotmail.com")
 
+    def test_validate_email_return_instance(self):
+        self.signup.db.user_exists = MagicMock(return_value=False)
+        with patch("main.signup.input", return_value="valid@hotmail.com"):
+            result = self.signup.validate_email("valid@hotmail.com")
+
+        self.assertIsInstance(result, str)
+
     def test_validate_email_strip(self):
         self.signup.db.user_exists = MagicMock(return_value=False)
 
@@ -86,16 +93,22 @@ class TestSignup(unittest.TestCase):
         with patch("builtins.input", return_value="10"):
             result = self.signup.validate_age("10")
 
-            self.assertEqual(result, "10")
+            self.assertEqual(result, 10)
+
+    def test_validate_age_return_instance(self):
+        with patch("builtins.input", return_value="10"):
+            result = self.signup.validate_age("10")
+
+            self.assertIsInstance(result, int)
 
     def test_validate_age_invalid_length(self):
         with patch("builtins.input", side_effect=["123", "a2s", "2e", "000", "10"]):
             result = self.signup.validate_age("1234")
 
-            self.assertEqual(result, "10")
+            self.assertEqual(result, 10)
 
     def test_validate_age_strip(self):
-        age = "20"
+        age = 20
         self.assertEqual(self.signup.validate_age("  20"), age)
         self.assertEqual(self.signup.validate_age("20  "), age)
         self.assertEqual(self.signup.validate_age("  20  "), age)
@@ -114,6 +127,12 @@ class TestSignup(unittest.TestCase):
 
         self.assertEqual(self.signup.validate_password(), "password123.")
         self.signup.hash_password.assert_called_once()
+
+    @patch("main.signup.getpass", side_effect=["password123.", "password123."])
+    def test_validate_password_return_value(self, mocked_getpass):
+        self.signup.hash_password = MagicMock(return_value="password123.")
+
+        self.assertIsInstance(self.signup.validate_password(), str)
 
     @patch("main.password.Password.hash_password", return_value="password123.")
     @patch("main.signup.getpass", side_effect=["password123.", "password123", "password123.", "password123."])
