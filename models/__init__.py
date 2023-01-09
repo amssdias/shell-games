@@ -1,4 +1,4 @@
-from .abstract import DB
+from .abstracts.db import DB
 from .csv_model import CSVDB
 from .files_models import *
 from .file_model import FileDB

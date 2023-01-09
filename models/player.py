@@ -1,5 +1,4 @@
-from main import settings
-from models.abstract import DB
+from models.abstracts.db import DB
 from models.constants.database_actions import DatabaseActions
 from tasks.thread_tasks import ThreadTask
 
