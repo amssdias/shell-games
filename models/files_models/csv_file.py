@@ -1,10 +1,11 @@
 import csv
 from typing import Dict, List, Union
+from models.abstracts.file_operations import FileOperations
 
 from models.constants.database_actions import DatabaseActions
 
 
-class CSVFile:
+class CSVFile(FileOperations):
 
     def __init__(self, file_path):
         self.file_path = file_path
@@ -39,7 +40,7 @@ class CSVFile:
             for user in users:
                 if user["email"] == player["email"]:
                     try:
-                        user["games_played"] = user["games_played"] + 1
+                        user["games_played"] = int(user["games_played"]) + 1
                     except TypeError as e:
                         raise TypeError(e)
                     player = user

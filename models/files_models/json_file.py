@@ -2,8 +2,10 @@ import json
 from pathlib import Path
 from typing import Dict, List, Union
 
+from models.abstracts.file_operations import FileOperations
 
-class JsonFile:
+
+class JsonFile(FileOperations):
 
     def __init__(self, file_path: Path):
         self.file_path = file_path
