@@ -79,7 +79,7 @@ class TestFileModel(TestFile):
         
         self.db.db.update_user_games_played.assert_called_once()
 
-    def test_update_user_games_played(self):
+    def test_update_user_score(self):
         self.db.db.update_user_score = MagicMock()
         self.db.update_user(self.user_1, DatabaseActions.SCORE)
         
