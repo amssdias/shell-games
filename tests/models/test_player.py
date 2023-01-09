@@ -12,7 +12,7 @@ class TestPlayer(unittest.TestCase):
         self.db = TestDBCSV()
         self.user = {
             "email": "testing@hotmail.com",
-            "age": "23",
+            "age": 23,
             "password": "password",
         }
         self.player = Player(self.db)
@@ -32,13 +32,12 @@ class TestPlayer(unittest.TestCase):
         self.assertEqual(self.player.password, None)
 
     def test_register_player(self):
-        player = {"email": "test@example.com", "age": "20", "password": "password"}
-        result = self.player.register_player(**player)
+        result = self.player.register_player(**self.user)
 
         self.assertEqual(result, None)
-        self.assertEqual(self.player.email, player["email"])
-        self.assertEqual(self.player.age, player["age"])
-        self.assertEqual(self.player.password, player["password"])
+        self.assertEqual(self.player.email, self.user["email"])
+        self.assertEqual(self.player.age, self.user["age"])
+        self.assertEqual(self.player.password, self.user["password"])
 
     def test_update_games_played(self):
         self.player.register_player(**self.user)

@@ -13,12 +13,12 @@ class Player:
         self.age = None
         self.password = None
 
-    def register_player(self, email, age, password):
+    def register_player(self, email: str, age: int, password: str) -> None:
         self.email = email
         self.age = age
         self.password = password
 
-    def update_games_played(self):
+    def update_games_played(self) -> None:
         player = {
             "email": self.email,
             "age": self.age,
@@ -26,7 +26,7 @@ class Player:
         }
         ThreadTask.task(self.db.update_user, player, DatabaseActions.GAMES_PLAYED)
 
-    def update_score(self):
+    def update_score(self) -> None:
         player = {
             "email": self.email,
             "age": self.age,
