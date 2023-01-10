@@ -2,7 +2,7 @@ from threading import Thread
 import unittest
 from unittest.mock import patch
 
-from models import DB, CSVDB, Player
+from models import DB, Player
 from tests.models.utils.testing_db import TestDBCSV
 
 
