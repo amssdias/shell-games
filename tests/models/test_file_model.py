@@ -1,6 +1,6 @@
 import csv
 from pathlib import Path
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 
 from models.abstracts.db import DB
 from models.constants.database_actions import DatabaseActions
