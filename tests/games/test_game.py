@@ -16,10 +16,10 @@ class TestGame(unittest.TestCase):
 
     @patch("games.game.Game.start_game_settings", return_value=None)
     @patch("games.game.Game.start_game", return_value=True)
-    def test_play_won(self, mocked_start_game, mocked_game_settings):
+    def test_play_won(self, mock_start_game, mock_game_settings):
         self.assertTrue(self.game.play())
 
     @patch("games.game.Game.start_game_settings", return_value=None)
     @patch("games.game.Game.start_game", return_value=False)
-    def test_play_lost(self, mocked_start_game, mocked_game_settings):
+    def test_play_lost(self, mock_start_game, mock_game_settings):
         self.assertFalse(self.game.play())

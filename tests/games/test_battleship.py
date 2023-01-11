@@ -68,17 +68,15 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(ship_positions, {(5, 5), (4, 5), (3, 5), (2, 5), (1, 5)})
 
 
-    @patch("games.battleship.battleship.print")
-    @patch("games.battleship.battleshipdraw.print")
-    def test_start_game(self, mocked_print, mocked_printdraw):
-        mocked_print.return_value = None
+    @patch("builtins.print", return_value=None)
+    def test_start_game(self, mock_print):
         self.game.start_game_settings()
 
-        with patch("games.battleship.battleship.input") as mocked_input:
+        with patch("builtins.input") as mock_input:
             s = list(self.game.ships_positions)
             ships_positions = self._change_rows_for_alphabet(s)
-            mocked_input.side_effect = ships_positions
-            mocked_input.return_value = None
+            mock_input.side_effect = ships_positions
+            mock_input.return_value = None
 
             user_won = self.game.start_game()
 
@@ -95,7 +93,7 @@ class TestBattleship(unittest.TestCase):
 
         return new_ship_positions
 
-    @patch("games.battleship.battleship.print", return_value=None)
+    @patch("builtins.print", return_value=None)
     def test_validate_user_shot(self, mocked_print):
         self.game.start_game_settings()
         self.assertEqual(self.game.validate_user_shot("D-5"), (3, 4))
@@ -115,8 +113,8 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(self.game.validate_user_shot("5-K"), False)
 
     def test_update_battlefield(self):
-        with patch("games.battleship.battleship.print") as mocked_print:
-            mocked_print.return_value = None
+        with patch("builtins.print") as mock_print:
+            mock_print.return_value = None
             self.game.start_game_settings()
             
         self.game.update_battlefield(hit=False, coordinates=(2, 2))
@@ -126,8 +124,7 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(self.game.battlefield[3][2], Fore.RED + "X")
 
     def test_print_boat_hit(self):
-        with patch("games.battleship.battleship.print") as mocked_input:
-            mocked_input.return_value = None
+        with patch("builtins.print", return_value=None) as mock_print:
             self.game.start_game_settings()
             
             ship_position = tuple(self.game.ships["carrier"]["position"])[0]

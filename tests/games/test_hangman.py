@@ -42,9 +42,9 @@ class TestHangman(unittest.TestCase):
         self.assertIn(self.game.get_random_word(True), self.game.random)
         self.assertIsInstance(self.game.get_random_word("as"), str)
 
-    @patch("games.hangman.hangman.print", return_value=None)
-    @patch("games.hangman.hangman.input", side_effect=["5", "2"])
-    def test_hangman_get_difficulty_level(self, mocked_input, mocked_print):
+    @patch("builtins.print", return_value=None)
+    @patch("builtins.input", side_effect=["5", "2"])
+    def test_hangman_get_difficulty_level(self, mock_input, mock_print):
         self.assertEqual(self.game.get_difficulty_level(), "2")
 
     def test_hangman_get_letters(self):
@@ -54,8 +54,8 @@ class TestHangman(unittest.TestCase):
 
     def test_hangman_game_settings(self):
 
-        with patch("games.hangman.hangman.input") as mocked_input:
-            mocked_input.side_effect = ["1", "2", "3"]
+        with patch("builtins.input") as mock_input:
+            mock_input.side_effect = ["1", "2", "3"]
             
             self.game.start_game_settings()
             self.assertIn(self.game.word, self.game.easy_words)
@@ -69,21 +69,20 @@ class TestHangman(unittest.TestCase):
             self.assertIn(self.game.word, self.game.hard_words)
             self.assertIn("".join(self.game.letters), self.game.word)
 
-    @patch("games.hangman.hangman.print", return_value=None)
-    @patch("games.hangman.hangmandraw.print", return_value=None)
-    def test_display_game(self, mocked_draw_print, mocked_print):
+    @patch("builtins.print", return_value=None)
+    def test_display_game(self, mock_print):
         self.game.word = "animal"
         self.game.letters.add("a")
 
-        with patch("games.hangman.hangman.input") as mocked_input:
+        with patch("builtins.input") as mock_input:
 
-            mocked_input.side_effect = ["t", "n", "i", "m", "l"]
+            mock_input.side_effect = ["t", "n", "i", "m", "l"]
             self.assertTrue(self.game.start_game())
             self.assertEqual(self.game.guesses, 5)
 
             self.game.guesses = 6
             self.game.letters = set("a")
-            mocked_input.side_effect = ["t", "g", "l", "u", "z", "h", "r", "e"]
+            mock_input.side_effect = ["t", "g", "l", "u", "z", "h", "r", "e"]
             self.assertFalse(self.game.start_game())
             self.assertEqual(self.game.guesses, 0)
 
