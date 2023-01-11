@@ -1,3 +1,4 @@
+from typing import Union
 import colorama
 from colorama import Fore
 
@@ -14,11 +15,11 @@ class Controller:
     def __init__(self, player):
         self.player = player
 
-    def start(self):
+    def start(self) -> None:
         print(Fore.YELLOW + f"Hello :D!")
 
         while True:
-            print("Which game you would like to play?")
+            print("Which game would you like to play?")
             game = self.get_game()
             if not game:
                 continue
@@ -36,7 +37,7 @@ class Controller:
                 print("Goodbye. :)")
                 break
 
-    def get_game(self):
+    def get_game(self) -> Union[object, bool]:
         self.display_games()
 
         user_input = input(f"Write the name of the game: {Fore.LIGHTCYAN_EX}")
@@ -46,18 +47,18 @@ class Controller:
             return self.games[validated]()
         return False
 
-    def display_games(self):
+    def display_games(self) -> None:
         for game in self.games.keys():
             print(f"- {Fore.CYAN}{game}")
 
-    def validate_user_game_choice(self, user_input: str):
+    def validate_user_game_choice(self, user_input: str) -> Union[str, bool]:
         user_input_capitalized = user_input.capitalize()
         if user_input_capitalized not in self.games.keys():
             print(Fore.RED + "Game not found.")
             return False
         return user_input_capitalized
 
-    def display_result(self, won: bool):
+    def display_result(self, won: bool) -> None:
         if won:
             self.player.update_score()
             print(Fore.GREEN + "You Won!!! :D")
