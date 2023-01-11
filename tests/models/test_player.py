@@ -41,8 +41,8 @@ class TestPlayer(unittest.TestCase):
 
     def test_update_games_played(self):
         self.player.register_player(**self.user)
-        with patch("models.file_model.FileDB.update_user") as mocked_upate_player:
-            mocked_upate_player.return_value = True
+        with patch("models.file_model.FileDB.update_user") as mock_upate_player:
+            mock_upate_player.return_value = True
             thread_1 = Thread(target=self.player.update_games_played)
             thread_1.start()
             thread_1.join()
@@ -51,8 +51,8 @@ class TestPlayer(unittest.TestCase):
 
     def test_update_score(self):
         self.player.register_player(**self.user)
-        with patch("models.file_model.FileDB.update_user") as mocked_upate_player:
-            mocked_upate_player.return_value = True
+        with patch("models.file_model.FileDB.update_user") as mock_upate_player:
+            mock_upate_player.return_value = True
             thread_1 = Thread(target=self.player.update_score)
             thread_1.start()
             thread_1.join()
