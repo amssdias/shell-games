@@ -54,13 +54,13 @@ class TestLogin(unittest.TestCase):
 
     def test_login_user(self):
         self.login.db = MagicMock()
-        self.login.db.user_exists.return_value = {"password": "password"}
+        self.login.db.user_exists.return_value = {"age": 23, "password": "password"}
         self.login.check_password = MagicMock(return_value=True)
 
         result = self.login.login_user(self.player, "testing@testing.com", "password")
 
         self.assertTrue(self.player.logged)
-        self.assertEqual(result, {"password": "password"})
+        self.assertEqual(result, {"age": 23, "password": "password"})
         self.login.db.user_exists.assert_called_once_with("testing@testing.com")
         self.login.check_password.assert_called_once_with("password", "password")
 
