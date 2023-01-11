@@ -6,7 +6,6 @@ from models.abstracts.file_operations import FileOperations
 
 
 class JsonFile(FileOperations):
-
     def __init__(self, file_path: Path):
         self.file_path = file_path
 
@@ -31,7 +30,7 @@ class JsonFile(FileOperations):
             json.dump(users, json_file, indent=2)
         return True
 
-    def update_user_games_played(self, player) -> Dict:
+    def update_user_games_played(self, player: Dict) -> bool:
         users = self.get_all_users()
         with open(self.file_path, "w") as json_file:
             for user in users:
@@ -40,14 +39,13 @@ class JsonFile(FileOperations):
                         user["games_played"] = int(user["games_played"]) + 1
                     except TypeError as e:
                         raise TypeError(e)
-                    player = user
                     break
             else:
                 raise ValueError("Missing user from database.")
             json.dump(users, json_file, indent=2)
-        return player
+        return True
 
-    def update_user_score(self, player: Dict) -> Union[Dict, Exception]:
+    def update_user_score(self, player: Dict) -> bool:
         users = self.get_all_users()
         with open(self.file_path, "w") as json_file:
             for user in users:
@@ -56,9 +54,8 @@ class JsonFile(FileOperations):
                         user["score"] = int(user["score"]) + 1
                     except TypeError as e:
                         raise TypeError(e)
-                    player = user
                     break
             else:
                 raise ValueError("Missing user from database.")
             json.dump(users, json_file, indent=2)
-        return player
+        return True
