@@ -67,4 +67,6 @@ python base.py
 
 Just follow the instructions on the terminal.
 
+<img src="animation.gif" alt="your gif">
+
 Have fun :smile:
