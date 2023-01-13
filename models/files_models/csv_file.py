@@ -2,8 +2,6 @@ import csv
 from typing import Dict, List, Union
 from models.abstracts.file_operations import FileOperations
 
-from models.constants.database_actions import DatabaseActions
-
 
 class CSVFile(FileOperations):
     def __init__(self, file_path):
