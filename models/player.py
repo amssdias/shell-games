@@ -6,7 +6,7 @@ from tasks.thread_tasks import ThreadTask
 class Player:
     def __init__(self, db: DB):
         self.db = db
-        
+
         self.logged = False
         self.email = None
         self.age = None
