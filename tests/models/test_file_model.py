@@ -1,4 +1,3 @@
-import csv
 from pathlib import Path
 from unittest.mock import MagicMock
 
@@ -6,10 +5,10 @@ from models.abstracts.db import DB
 from models.constants.database_actions import DatabaseActions
 from models.file_model import FileDB
 from models.files_models import CSVFile
-from tests.models.utils.test_file_utils import TestFile
+from tests.models.utils.csv_file import TestCSVFileUtils
 
 
-class TestFileModel(TestFile):
+class TestFileModel(TestCSVFileUtils):
     def setUp(self) -> None:
         super().setUp()
         self.file_directory = Path(Path.cwd(), "tests", "models", "db", "testing.csv")
@@ -46,7 +45,6 @@ class TestFileModel(TestFile):
         }
         new_user = self.db.create_user(**user)
 
-
         self.assertEqual(new_user["email"], user["email"])
         self.assertEqual(new_user["age"], user["age"])
         self.assertEqual(new_user["password"], user["password"])
@@ -76,11 +74,11 @@ class TestFileModel(TestFile):
     def test_update_user_games_played(self):
         self.db.db.update_user_games_played = MagicMock()
         self.db.update_user(self.user_1, DatabaseActions.GAMES_PLAYED)
-        
+
         self.db.db.update_user_games_played.assert_called_once()
 
     def test_update_user_score(self):
         self.db.db.update_user_score = MagicMock()
         self.db.update_user(self.user_1, DatabaseActions.SCORE)
-        
+
         self.db.db.update_user_score.assert_called_once()

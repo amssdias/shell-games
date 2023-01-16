@@ -3,10 +3,10 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 from models.files_models import JsonFile
-from tests.models.utils.test_file_utils import TestFile
+from tests.models.utils.json_file import TestJsonFileUtils
 
 
-class TestJsonFile(TestFile):
+class TestJsonFile(TestJsonFileUtils):
     def setUp(self) -> None:
         super().setUp()
         self.file_directory = Path(Path.cwd(), "tests", "models", "db", "testing.json")
@@ -62,7 +62,7 @@ class TestJsonFile(TestFile):
                     break
             else:
                 assert False, "It did not saved a user to the file"
-        
+
         self.delete_data_from_json()
 
     def test_update_user_games_played(self):

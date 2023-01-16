@@ -3,10 +3,10 @@ from pathlib import Path
 from unittest.mock import MagicMock
 
 from models.files_models import CSVFile
-from tests.models.utils.test_file_utils import TestFile
+from tests.models.utils.csv_file import TestCSVFileUtils
 
 
-class TestCSVFile(TestFile):
+class TestCSVFile(TestCSVFileUtils):
     def setUp(self) -> None:
         super().setUp()
         self.file_directory = Path(Path.cwd(), "tests", "models", "db", "testing.csv")
@@ -32,7 +32,7 @@ class TestCSVFile(TestFile):
         self.user_2["age"] = str(self.user_2["age"])
         self.user_2["score"] = str(self.user_2["score"])
         self.user_2["games_played"] = str(self.user_2["games_played"])
-        
+
         self.assertCountEqual(users, [self.user_1, self.user_2])
 
     def test_get_all_users_return_value(self):
@@ -88,7 +88,7 @@ class TestCSVFile(TestFile):
                     break
             else:
                 assert False, "It did not saved a user to the file"
-        
+
         self.delete_data_from_csv()
 
     def test_update_user_games_played(self):
@@ -100,7 +100,7 @@ class TestCSVFile(TestFile):
         self.assertEqual(player["games_played"], "1")
 
         self.delete_data_from_csv()
-    
+
     def test_update_user_score(self):
         self.db.get_all_users = MagicMock(return_value=self.users)
         self.db.update_user_score(self.user_1)
