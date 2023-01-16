@@ -1,9 +1,8 @@
 import openpyxl
 from openpyxl.utils import get_column_letter
 from typing import Dict, List, Union
-from models.abstracts.file_operations import FileOperations
 
-from models.constants.database_actions import DatabaseActions
+from models.abstracts.file_operations import FileOperations
 
 
 class ExcelFile(FileOperations):
@@ -33,13 +32,15 @@ class ExcelFile(FileOperations):
 
         return users
 
-    def get_users_sheet(self, sheet):
-        return sheet["Users"]
+    def get_users_sheet(
+        self, excel_file: openpyxl.Workbook
+    ) -> openpyxl.worksheet.worksheet.Worksheet:
+        return excel_file["Users"]
 
     def read_file(self) -> openpyxl.Workbook:
         return openpyxl.load_workbook(self.file_path)
 
-    def validate_columns_order(self, sheet) -> None:
+    def validate_columns_order(self, sheet) -> bool:
         for column in range(1, sheet.max_column):
             header = sheet[get_column_letter(column) + "1"].value
             if header not in self.headers:
@@ -49,6 +50,7 @@ class ExcelFile(FileOperations):
                 raise Exception(
                     f"Column {header} is not on the right order. The columns order should be {self.headers}"
                 )
+        return True
 
     def get_user(self, email: str) -> Union[Dict, None]:
         users = self.get_all_users()
@@ -71,6 +73,7 @@ class ExcelFile(FileOperations):
 
         try:
             excel_file.save(self.file_path)
+            return True
         except PermissionError:
             raise PermissionError("Close your excel file so the user can be saved.")
 
@@ -95,7 +98,7 @@ class ExcelFile(FileOperations):
         except PermissionError:
             raise PermissionError("Close your excel file so we can update it.")
 
-    def update_user_score(self, player: Dict):
+    def update_user_score(self, player: Dict) -> bool:
         excel_file = self.read_file()
         sheet = self.get_users_sheet(excel_file)
         self.validate_column_score(sheet)
@@ -114,13 +117,13 @@ class ExcelFile(FileOperations):
         except PermissionError:
             raise PermissionError("Close your excel file so we can update it.")
 
-    def validate_column_games_played(self, sheet):
+    def validate_column_games_played(self, sheet) -> None:
         if sheet.cell(row=1, column=5).value != "games played":
             raise Exception(
                 f"Column 'games played' is not on the right order. The columns order should be {self.headers}"
             )
 
-    def validate_column_score(self, sheet):
+    def validate_column_score(self, sheet) -> None:
         if sheet.cell(row=1, column=4).value != "score":
             raise Exception(
                 f"Column 'score' is not on the right order. The columns order should be {self.headers}"
