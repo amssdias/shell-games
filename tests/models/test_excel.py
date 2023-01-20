@@ -126,4 +126,24 @@ class TestExcelFile(TestExcelFileUtils):
             self.db.validate_column_games_played(sheet)
 
     def test_validate_column_score(self):
-        pass
+        sheet = MagicMock()
+        cell = MagicMock(value="score")
+        sheet.cell.return_value = cell
+
+        self.db.validate_column_score(sheet)
+
+    def test_validate_column_score_wrong_column(self):
+        sheet = MagicMock()
+        cell = MagicMock(value="games played")
+        sheet.cell.return_value = cell
+
+        with self.assertRaises(Exception) as e:
+            self.db.validate_column_score(sheet)
+
+    def test_validate_column_score_empty_column(self):
+        sheet = MagicMock()
+        cell = MagicMock(value="")
+        sheet.cell.return_value = cell
+
+        with self.assertRaises(Exception) as e:
+            self.db.validate_column_score(sheet)
