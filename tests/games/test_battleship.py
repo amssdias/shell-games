@@ -48,25 +48,36 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(len(self.game.ships_positions), len_all_ships)
 
     def test_get_ship_positions_horizontal(self):
-        ship_positions = self.game.get_ship_positions_horizontal(ship_size=5, ship_column=9, ship_row=9)
+        ship_positions = self.game.get_ship_positions_horizontal(
+            ship_size=5, ship_column=9, ship_row=9
+        )
         self.assertEqual(ship_positions, {(9, 9), (9, 8), (9, 7), (9, 6), (9, 5)})
 
-        ship_positions = self.game.get_ship_positions_horizontal(ship_size=5, ship_column=0, ship_row=0)
+        ship_positions = self.game.get_ship_positions_horizontal(
+            ship_size=5, ship_column=0, ship_row=0
+        )
         self.assertEqual(ship_positions, {(0, 0), (0, 1), (0, 2), (0, 3), (0, 4)})
 
-        ship_positions = self.game.get_ship_positions_horizontal(ship_size=5, ship_column=5, ship_row=5)
+        ship_positions = self.game.get_ship_positions_horizontal(
+            ship_size=5, ship_column=5, ship_row=5
+        )
         self.assertEqual(ship_positions, {(5, 5), (5, 1), (5, 2), (5, 3), (5, 4)})
 
     def test_get_ship_positions_vertically(self):
-        ship_positions = self.game.get_ship_positions_vertically(ship_size=5, ship_column=9, ship_row=9)
+        ship_positions = self.game.get_ship_positions_vertically(
+            ship_size=5, ship_column=9, ship_row=9
+        )
         self.assertEqual(ship_positions, {(9, 9), (8, 9), (7, 9), (6, 9), (5, 9)})
 
-        ship_positions = self.game.get_ship_positions_vertically(ship_size=5, ship_column=0, ship_row=0)
+        ship_positions = self.game.get_ship_positions_vertically(
+            ship_size=5, ship_column=0, ship_row=0
+        )
         self.assertEqual(ship_positions, {(0, 0), (1, 0), (2, 0), (3, 0), (4, 0)})
 
-        ship_positions = self.game.get_ship_positions_vertically(ship_size=5, ship_column=5, ship_row=5)
+        ship_positions = self.game.get_ship_positions_vertically(
+            ship_size=5, ship_column=5, ship_row=5
+        )
         self.assertEqual(ship_positions, {(5, 5), (4, 5), (3, 5), (2, 5), (1, 5)})
-
 
     @patch("builtins.print", return_value=None)
     def test_start_game(self, mock_print):
@@ -111,12 +122,14 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(self.game.validate_user_shot("5D-"), False)
         self.assertEqual(self.game.validate_user_shot("5-J"), (9, 4))
         self.assertEqual(self.game.validate_user_shot("5-K"), False)
+        self.assertEqual(self.game.validate_user_shot("-K"), False)
+        self.assertEqual(self.game.validate_user_shot("3-"), False)
 
     def test_update_battlefield(self):
         with patch("builtins.print") as mock_print:
             mock_print.return_value = None
             self.game.start_game_settings()
-            
+
         self.game.update_battlefield(hit=False, coordinates=(2, 2))
         self.assertEqual(self.game.battlefield[2][2], Fore.LIGHTBLUE_EX + "O")
 
@@ -126,10 +139,10 @@ class TestBattleship(unittest.TestCase):
     def test_print_boat_hit(self):
         with patch("builtins.print", return_value=None) as mock_print:
             self.game.start_game_settings()
-            
+
             ship_position = tuple(self.game.ships["carrier"]["position"])[0]
             self.game.print_boat_hit(coordinates=ship_position)
-            
+
             self.assertNotIn(ship_position, self.game.ships_positions)
 
     def test_check_user_won(self):

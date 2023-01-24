@@ -136,7 +136,7 @@ class BattleShip(Game, BattleShipDraw):
 
     def validate_user_shot(self, user_shot: str) -> tuple:
         """Validate a user should write only: a letter followed by a '-' and a number. (D-5)"""
-        coordinates = user_shot.split("-")
+        coordinates = [c for c in user_shot.split("-") if c]
         if len(coordinates) != 2 or len(coordinates[0]) > 2 or len(coordinates[1]) > 2:
             print("Write your move like this: A-5 or 5-A")
             return False
