@@ -3,6 +3,7 @@ import string
 from typing import List, Set
 
 from colorama import Fore
+from games.battleship.battleship_board import BattleshipBoard
 from games.battleship.battleshipdraw import BattleShipDraw
 from games.battleship.constants import ASCII_A_UNICODE
 
@@ -34,17 +35,11 @@ class BattleShip(Game, BattleShipDraw):
         }
         self.ships_positions = set()
         self.user_points = 0
-        self.battlefield = []
-
-    def build_battlefield(self) -> List:
-        """Build battlefield to print out."""
-        battle_field = [["." for _ in range(10)] for _ in range(10)]
-        return battle_field
+        self.board = BattleshipBoard(10, 10)
 
     def start_game_settings(self) -> None:
         self.user_points = 70
         self.set_ships_positions()
-        self.battlefield = self.build_battlefield()
         print(Fore.YELLOW + "Instructions: You should call your move like: D-4/4-D.")
 
     def set_ships_positions(self) -> None:
@@ -109,7 +104,7 @@ class BattleShip(Game, BattleShipDraw):
     def start_game(self) -> bool:
 
         while True:
-            self.print_battlefield()
+            self.board.display_board()
             user_shot = input("Your call: ")
 
             coordinates_validated = self.validate_user_shot(user_shot)
@@ -118,17 +113,18 @@ class BattleShip(Game, BattleShipDraw):
 
             # If user don't hit a ship
             if {coordinates_validated}.isdisjoint(self.ships_positions):
+                hit = False
                 print(Fore.BLUE + "Miss!")
                 self.user_points -= 1
-                self.update_battlefield(hit=False, coordinates=coordinates_validated)
 
             else:
+                hit = True
                 self.print_boat_hit(coordinates_validated)
                 won = self.check_user_won()
                 if won:
                     return True
 
-                self.update_battlefield(hit=True, coordinates=coordinates_validated)
+            self.board.mark_board_position(hit=hit, coordinates=coordinates_validated)
 
             if not self.user_points:
                 print("Ships sinking...")
@@ -141,7 +137,7 @@ class BattleShip(Game, BattleShipDraw):
             print("Write your move like this: A-5 or 5-A")
             return False
 
-        rows = string.ascii_uppercase[: len(self.battlefield)]
+        rows = string.ascii_uppercase[: len(self.board.positions)]
         if (coordinates[0] not in rows and coordinates[1] not in rows) or (
             not coordinates[0].isnumeric() and not coordinates[1].isnumeric()
         ):
@@ -157,12 +153,6 @@ class BattleShip(Game, BattleShipDraw):
             column = int(coordinates[0]) - 1  # User will not write D-0, but D-1
 
         return (row, column)
-
-    def update_battlefield(self, hit: bool, coordinates: tuple):
-        row, column = coordinates
-        self.battlefield[row][column] = (
-            Fore.RED + "X" if hit else Fore.LIGHTBLUE_EX + "O"
-        )
 
     def print_boat_hit(self, coordinates: tuple):
         for ship_name, ship_info in self.ships.items():

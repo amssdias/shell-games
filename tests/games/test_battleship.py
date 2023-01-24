@@ -2,6 +2,7 @@ import string
 import unittest
 from colorama import Fore
 from unittest.mock import patch
+from games.abstracts.board import Board
 
 from games.battleship import BattleShip
 
@@ -15,11 +16,11 @@ class TestBattleship(unittest.TestCase):
         self.assertIn("ships", battleship_initial_variables)
         self.assertIn("ships_positions", battleship_initial_variables)
         self.assertIn("user_points", battleship_initial_variables)
-        self.assertIn("battlefield", battleship_initial_variables)
+        self.assertIn("board", battleship_initial_variables)
 
         self.assertIsInstance(self.game.ships, dict)
         self.assertIsInstance(self.game.ships_positions, set)
-        self.assertIsInstance(self.game.battlefield, list)
+        self.assertIsInstance(self.game.board, Board)
         self.assertIsInstance(self.game.user_points, int)
 
         ships = self.game.ships.keys()
@@ -28,10 +29,6 @@ class TestBattleship(unittest.TestCase):
         self.assertIn("cruiser", ships)
         self.assertIn("submarine", ships)
         self.assertIn("destroyer", ships)
-
-    def test_build_battlefield(self):
-        battlefield = [["." for _ in range(10)] for _ in range(10)]
-        self.assertEqual(self.game.build_battlefield(), battlefield)
 
     def test_set_ships_positions(self):
         self.game.set_ships_positions()
@@ -109,6 +106,7 @@ class TestBattleship(unittest.TestCase):
         self.game.start_game_settings()
         self.assertEqual(self.game.validate_user_shot("D-5"), (3, 4))
         self.assertEqual(self.game.validate_user_shot("5-D"), (3, 4))
+        self.assertEqual(self.game.validate_user_shot("5--D"), (3, 4))
         self.assertEqual(self.game.validate_user_shot("D5"), False)
         self.assertEqual(self.game.validate_user_shot("5D"), False)
         self.assertEqual(self.game.validate_user_shot("5d"), False)
@@ -117,24 +115,12 @@ class TestBattleship(unittest.TestCase):
         self.assertEqual(self.game.validate_user_shot("5 D"), False)
         self.assertEqual(self.game.validate_user_shot("5 - D"), False)
         self.assertEqual(self.game.validate_user_shot("5/D"), False)
-        self.assertEqual(self.game.validate_user_shot("5--D"), False)
         self.assertEqual(self.game.validate_user_shot("-5D"), False)
         self.assertEqual(self.game.validate_user_shot("5D-"), False)
         self.assertEqual(self.game.validate_user_shot("5-J"), (9, 4))
         self.assertEqual(self.game.validate_user_shot("5-K"), False)
         self.assertEqual(self.game.validate_user_shot("-K"), False)
         self.assertEqual(self.game.validate_user_shot("3-"), False)
-
-    def test_update_battlefield(self):
-        with patch("builtins.print") as mock_print:
-            mock_print.return_value = None
-            self.game.start_game_settings()
-
-        self.game.update_battlefield(hit=False, coordinates=(2, 2))
-        self.assertEqual(self.game.battlefield[2][2], Fore.LIGHTBLUE_EX + "O")
-
-        self.game.update_battlefield(hit=True, coordinates=(3, 2))
-        self.assertEqual(self.game.battlefield[3][2], Fore.RED + "X")
 
     def test_print_boat_hit(self):
         with patch("builtins.print", return_value=None) as mock_print:

@@ -1,4 +1,6 @@
-from typing import List
+from typing import List, Tuple
+
+from colorama import Fore
 
 from games.abstracts.board import Board
 from games.battleship.constants import ASCII_A_UNICODE
@@ -31,4 +33,9 @@ class BattleshipBoard(Board):
             for dot in row:
                 print(dot, end="  ")
             print()
+        return None
+
+    def mark_board_position(self, hit: bool, coordinates: Tuple) -> None:
+        row, column = coordinates
+        self.positions[row][column] = Fore.RED + "X" if hit else Fore.LIGHTBLUE_EX + "O"
         return None
