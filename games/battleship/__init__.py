@@ -1,3 +1,2 @@
 from .battleship import BattleShip
-from .battleshipdraw import BattleShipDraw
-from .constants import *
+from .constants import ASCII_A_UNICODE

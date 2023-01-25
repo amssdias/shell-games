@@ -4,13 +4,12 @@ from typing import List, Set
 
 from colorama import Fore
 from games.battleship.battleship_board import BattleshipBoard
-from games.battleship.battleshipdraw import BattleShipDraw
 from games.battleship.constants import ASCII_A_UNICODE
 
 from games.game import Game
 
 
-class BattleShip(Game, BattleShipDraw):
+class BattleShip(Game):
     """
     Battleship game, try to call your shot and hit a ship!
     """
@@ -36,6 +35,9 @@ class BattleShip(Game, BattleShipDraw):
         self.ships_positions = set()
         self.user_points = 0
         self.board = BattleshipBoard(10, 10)
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}()"
 
     def start_game_settings(self) -> None:
         self.user_points = 70
