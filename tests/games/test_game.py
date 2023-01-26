@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import patch
 
-from games.game import Game
+from games.abstracts.game import Game
 
 
 class TestGame(unittest.TestCase):

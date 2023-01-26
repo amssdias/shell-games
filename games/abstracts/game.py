@@ -8,9 +8,9 @@ class Game(ABC):
         return won
 
     @abstractmethod
-    def start_game_settings(self):
+    def start_game_settings(self) -> None:
         """Build all settings a game must do before playing."""
 
     @abstractmethod
-    def start_game(self):
+    def start_game(self) -> bool:
         """Start the game."""

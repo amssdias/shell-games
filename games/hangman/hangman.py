@@ -1,7 +1,8 @@
 import random
+from typing import Set
 
 from colorama import Fore
-from games.game import Game
+from games.abstracts.game import Game
 from games.hangman.hangmandraw import HangmanDraw
 
 
@@ -27,12 +28,12 @@ class Hangman(Game, HangmanDraw):
 
     game_difficulty = {"1": easy_words, "2": medium_words, "3": hard_words}
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.word = None
         self.letters = set()
         self.guesses = 6
 
-    def start_game_settings(self):
+    def start_game_settings(self) -> None:
         difficulty = self.get_difficulty_level()
         self.word = self.get_random_word(difficulty)
         self.letters = self.get_letters()
@@ -58,7 +59,7 @@ Write your number: {Fore.YELLOW}"""
     def get_random_word(self, difficulty: str) -> str:
         return random.choice(self.game_difficulty.get(difficulty, self.random))
 
-    def get_letters(self) -> set():
+    def get_letters(self) -> Set:
         return set(random.choices(self.word))
 
     def start_game(self) -> bool:
@@ -81,7 +82,7 @@ Write your number: {Fore.YELLOW}"""
                 self.end_game_display_word()
                 return False
 
-    def display_game(self):
+    def display_game(self) -> None:
         self.display_draw()
 
         for letter in self.word:
@@ -91,14 +92,14 @@ Write your number: {Fore.YELLOW}"""
                 print("_", end=" ")
         print()
 
-    def check_letter_on_word(self, letter: str):
+    def check_letter_on_word(self, letter: str) -> bool:
         if not isinstance(letter, str):
             raise TypeError("Argument must be of type str.")
         if letter in self.word:
             return True
         return False
 
-    def check_user_won(self):
+    def check_user_won(self) -> bool:
         for letter in self.word:
             for used_letter in self.letters:
                 if letter == used_letter:
@@ -107,12 +108,12 @@ Write your number: {Fore.YELLOW}"""
                 return False
         return True
 
-    def update_guesses(self):
+    def update_guesses(self) -> None:
         self.guesses -= 1
 
     @staticmethod
-    def reset_color():
+    def reset_color() -> None:
         print(Fore.RESET)
 
-    def end_game_display_word(self):
+    def end_game_display_word(self) -> None:
         print(f"The word was {Fore.BLUE}{self.word}.")

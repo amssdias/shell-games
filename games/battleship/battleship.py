@@ -6,7 +6,7 @@ from colorama import Fore
 from games.battleship.battleship_board import BattleshipBoard
 from games.battleship.constants import ASCII_A_UNICODE
 
-from games.game import Game
+from games.abstracts.game import Game
 
 
 class BattleShip(Game):
