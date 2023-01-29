@@ -4,7 +4,7 @@ from typing import List, Set
 
 from colorama import Fore
 from games.battleship.battleship_board import BattleshipBoard
-from games.battleship.constants import ASCII_A_UNICODE
+from games.battleship.constants.ascii import ASCII_A_UNICODE
 
 from games.abstracts.game import Game
 

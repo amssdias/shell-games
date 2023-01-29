@@ -3,7 +3,7 @@ from typing import List, Tuple
 from colorama import Fore
 
 from games.abstracts.board import Board
-from games.battleship.constants import ASCII_A_UNICODE
+from games.battleship.constants.ascii import ASCII_A_UNICODE
 
 
 class BattleshipBoard(Board):
