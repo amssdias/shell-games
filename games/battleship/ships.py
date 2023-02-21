@@ -1,6 +1,5 @@
 import random
 from typing import List, Set
-from games.abstracts.pieces import Piece
 from games.battleship.constants.ships_names import ShipsNames
 
 
