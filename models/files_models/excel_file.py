@@ -58,6 +58,7 @@ class ExcelFile(FileOperations):
         for user in users:
             if user["email"] == email:
                 return user
+        return None
 
     def save_user(self, user: Dict) -> bool:
         excel_file = self.read_file()

@@ -1,5 +1,5 @@
 import csv
-from typing import Dict, List, Union
+from typing import Dict, List, Optional
 from models.abstracts.file_operations import FileOperations
 
 
@@ -14,7 +14,7 @@ class CSVFile(FileOperations):
         opened_file.close()
         return users
 
-    def get_user(self, email: str) -> Union[Dict, None]:
+    def get_user(self, email: str) -> Optional[Dict]:
         with open(self.file_path, "r") as csv_file:
             users = list(csv.DictReader(csv_file, delimiter=","))
 
