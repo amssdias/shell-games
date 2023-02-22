@@ -67,6 +67,6 @@ python base.py
 
 Just follow the instructions on the terminal.
 
-<img src="usage.gif" alt="your gif">
+<img src="img/usage.gif" alt="your gif">
 
 Have fun :smile:
